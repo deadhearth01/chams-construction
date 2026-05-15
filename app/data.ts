@@ -39,6 +39,7 @@ export type Service = {
   title: string;
   icon: typeof Building2;
   description: string;
+  image: string;
   sub: SubService[];
 };
 
@@ -61,6 +62,7 @@ export const serviceCategories: ServiceCategory[] = [
       {
         title: "Blasting & Painting",
         icon: Brush,
+        image: "/Services/CommercialServices/blasting-painting.png",
         description:
           "Surface preparation and protective coating systems for steel, concrete, and industrial structures. Built to withstand harsh environments and extend asset life.",
         sub: [
@@ -94,6 +96,7 @@ export const serviceCategories: ServiceCategory[] = [
       {
         title: "Electrical Services",
         icon: Zap,
+        image: "/Services/CommercialServices/Electrical-Services.png",
         description:
           "Commercial electrical installation, distribution, and maintenance carried out by licensed technicians.",
         sub: [
@@ -122,6 +125,7 @@ export const serviceCategories: ServiceCategory[] = [
       {
         title: "Plumbing & Sanitary",
         icon: Droplets,
+        image: "/Services/CommercialServices/plumbing-sanitary.png",
         description:
           "End-to-end commercial plumbing — water supply, drainage, and sanitary fixture installation and repair.",
         sub: [
@@ -150,6 +154,7 @@ export const serviceCategories: ServiceCategory[] = [
       {
         title: "Manpower Supply",
         icon: Users,
+        image: "/Services/CommercialServices/man-power.png",
         description:
           "Reliable site-ready workforce — skilled tradesmen, supervisors, and general labour deployed on demand.",
         sub: [
@@ -187,6 +192,7 @@ export const serviceCategories: ServiceCategory[] = [
       {
         title: "Interior Works",
         icon: Layers,
+        image: "/Services/Interior-Renovation/Interior-Works.png",
         description:
           "Full interior fit-out and finishing — partitions, ceilings, flooring, and bespoke joinery.",
         sub: [
@@ -215,6 +221,7 @@ export const serviceCategories: ServiceCategory[] = [
       {
         title: "Cement Plastering",
         icon: Hammer,
+        image: "/Services/Interior-Renovation/Cement-Plastering.png",
         description:
           "Smooth, level plaster finishes for walls and ceilings — prepared for paint, tile, or decorative finishes.",
         sub: [
@@ -243,6 +250,7 @@ export const serviceCategories: ServiceCategory[] = [
       {
         title: "Plumbing Services",
         icon: Droplets,
+        image: "/Services/Interior-Renovation/Plumbing-Services.png",
         description:
           "Residential and renovation plumbing — pipework, fittings, fixtures, and bathroom or kitchen upgrades.",
         sub: [
@@ -271,6 +279,7 @@ export const serviceCategories: ServiceCategory[] = [
       {
         title: "Painting",
         icon: Paintbrush,
+        image: "/Services/Interior-Renovation/painting.png",
         description:
           "Interior and exterior painting — surface preparation, primer, and finish coats for clean, lasting results.",
         sub: [
@@ -299,6 +308,7 @@ export const serviceCategories: ServiceCategory[] = [
       {
         title: "Electrical Services",
         icon: Zap,
+        image: "/Services/Interior-Renovation/Electrical-Services.png",
         description:
           "Residential electrical works — rewiring, lighting, fixture installation, and maintenance by licensed electricians.",
         sub: [
@@ -426,24 +436,22 @@ export const aboutBullets = [
   "Long-term partnerships built on trust, transparency, and performance",
 ];
 
-export const visionMission = [
+export const visionMissionValues = [
   {
     key: "vision",
     label: "Vision",
-    text: "To be a trusted leader in Singapore's construction industry, recognized for safety, quality, and sustainable engineering solutions.",
+    text: "To be a trusted leader in Singapore's construction industry, recognised for safety, quality, and sustainable engineering solutions.",
   },
   {
     key: "mission",
     label: "Mission",
     text: "To deliver innovative and reliable construction services with a strong focus on workplace safety, compliance, and client satisfaction.",
   },
-];
-
-export const coreValues = [
-  { title: "Safety First", text: "Prioritising health and safety in every project." },
-  { title: "Quality Assurance", text: "Commitment to excellence and reliability." },
-  { title: "Sustainability", text: "Promoting eco-friendly and energy-efficient solutions." },
-  { title: "Client Focus", text: "Building long-term partnerships through trust and performance." },
+  {
+    key: "values",
+    label: "Core Values",
+    text: "Safety first in every project, uncompromising quality and reliability, sustainable and energy-efficient practices, and long-term partnerships built on trust and performance.",
+  },
 ];
 
 export const principles = [

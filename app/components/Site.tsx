@@ -14,7 +14,7 @@ import {
   Minus,
   X,
 } from "lucide-react";
-import { motion, useScroll, useTransform, useInView, type Variants } from "framer-motion";
+import { motion, useScroll, useTransform, useInView, type Variants, type MotionValue } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
@@ -23,14 +23,12 @@ import {
   serviceCategories,
   roleOptions,
   workItems,
-  heroStats,
   stats,
   principles,
   featuredServices,
   sectorCards,
   aboutBullets,
-  visionMission,
-  coreValues,
+  visionMissionValues,
   type Service,
 } from "../data";
 
@@ -485,7 +483,7 @@ export function ButtonLink({
   variant?: "primary" | "outline";
 }) {
   const base =
-    "group inline-flex items-center gap-3 rounded-full px-6 py-3 text-[12px] tracking-[0.2em] uppercase transition";
+    "group inline-flex items-center justify-center gap-3 rounded-full px-6 py-3 text-[12px] tracking-[0.2em] uppercase transition sm:justify-start";
   if (variant === "outline") {
     return (
       <Link href={href} className={`${base} border border-[var(--ink)] text-[var(--ink)] hover:bg-[var(--ink)] hover:text-[var(--paper)]`}>
@@ -557,38 +555,38 @@ export function HomeHero() {
 
         {/* Foreground content */}
         <div className="relative z-10 flex min-h-[100svh] flex-col">
-          <div className="mx-auto flex w-full max-w-[1400px] flex-1 flex-col justify-center px-5 pt-32 pb-24 md:px-10 md:pt-36">
+          <div className="mx-auto flex w-full max-w-[1400px] flex-1 flex-col justify-center px-5 pt-28 pb-20 md:px-10 md:pt-36 md:pb-24">
             <div className="max-w-2xl lg:max-w-3xl">
               <Reveal>
                 <div className="flex items-center gap-3">
-                  <span className="size-2 rounded-full bg-[var(--gold)]" />
-                  <p className="eyebrow text-[var(--navy)]/85">
-                    Singapore · Est. construction partner
+                  <span className="size-2 shrink-0 rounded-full bg-[var(--gold)]" />
+                  <p className="eyebrow text-[10px] text-[var(--navy)]/85 md:text-[11px]">
+                    Singapore · Construction partner
                   </p>
                 </div>
               </Reveal>
-              <div className="mt-6">
+              <div className="mt-5 md:mt-6">
                 <SplitHeadline
                   text="Construction works,"
-                  className="font-display block text-[clamp(2.25rem,5vw,4.75rem)] leading-[1.02] tracking-tight text-[var(--navy)]"
+                  className="font-display block text-[clamp(2rem,7.5vw,4.75rem)] leading-[1.02] tracking-tight text-[var(--navy)]"
                 />
                 <SplitHeadline
                   text="done right."
                   delay={0.25}
-                  className="font-display-italic mt-1 block text-[clamp(2.25rem,5vw,4.75rem)] leading-[1.02] tracking-tight text-[var(--gold-deep)]"
+                  className="font-display-italic mt-1 block text-[clamp(2rem,7.5vw,4.75rem)] leading-[1.02] tracking-tight text-[var(--gold-deep)]"
                 />
               </div>
               <Reveal delay={0.5}>
-                <p className="mt-7 max-w-lg text-base leading-7 text-[var(--navy)]/90 md:text-lg">
+                <p className="mt-6 max-w-lg text-sm leading-6 text-[var(--navy)]/90 md:mt-7 md:text-lg md:leading-7">
                   Commercial and interior construction, delivered with discipline across Singapore.
                 </p>
               </Reveal>
               <Reveal delay={0.7}>
-                <div className="mt-8 flex flex-wrap gap-3">
+                <div className="mt-7 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center md:mt-8">
                   <ButtonLink href="/contact-us">Get in touch</ButtonLink>
                   <Link
                     href="/services"
-                    className="group inline-flex items-center gap-3 rounded-full border border-[var(--navy)]/40 bg-white/40 px-6 py-3 text-[12px] tracking-[0.2em] uppercase text-[var(--navy)] backdrop-blur transition hover:border-[var(--navy)] hover:bg-[var(--navy)] hover:text-white"
+                    className="group inline-flex items-center justify-center gap-3 rounded-full border border-[var(--navy)]/40 bg-white/40 px-6 py-3 text-[12px] tracking-[0.2em] uppercase text-[var(--navy)] backdrop-blur transition hover:border-[var(--navy)] hover:bg-[var(--navy)] hover:text-white sm:justify-start"
                   >
                     Explore services
                     <ArrowUpRight size={14} className="transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -610,33 +608,16 @@ export function HomeHero() {
           </div>
         </div>
       </section>
-
-      {/* Stat strip below hero */}
-      <section className="border-y border-[color:var(--line)] bg-[var(--paper)] px-5 md:px-10">
-        <div className="mx-auto grid max-w-[1400px] gap-px overflow-hidden bg-[color:var(--line)] md:grid-cols-4">
-          {heroStats.map(([label, text], i) => (
-            <Reveal key={label} delay={i * 0.08} className="bg-[var(--paper)]">
-              <div className="p-8">
-                <p className="font-mono text-[11px] tracking-[0.25em] uppercase text-[var(--gold-deep)]">
-                  / 0{i + 1}
-                </p>
-                <p className="mt-4 font-display text-3xl">{label}</p>
-                <p className="mt-2 text-sm leading-6 text-[var(--ash)]">{text}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </section>
     </>
   );
 }
 
 // ─────────────────────────────────────────────────────────────
-// AboutBlock — left content + right email card, used on Home
+// AboutBlock — left content + right team image, used on Home
 // ─────────────────────────────────────────────────────────────
 export function AboutBlock() {
   return (
-    <div className="grid gap-12 lg:grid-cols-[1.2fr_0.9fr] lg:items-start">
+    <div className="grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:items-start">
       {/* Left: About content */}
       <div>
         <Reveal>
@@ -678,51 +659,44 @@ export function AboutBlock() {
         </Reveal>
       </div>
 
-      {/* Right: email contact card */}
+      {/* Right: team image */}
       <Reveal delay={0.2} y={60}>
-        <div className="sticky top-32 overflow-hidden rounded-sm bg-[var(--navy)] p-10 text-[var(--paper)] md:p-12">
-          {/* decorative corner mark */}
-          <div className="absolute right-8 top-8 grid size-10 place-items-center rounded-full border border-white/15">
-            <Mail size={16} className="text-[var(--gold)]" />
-          </div>
-
-          <p className="font-mono text-[11px] tracking-[0.28em] uppercase text-[var(--gold)]">
-            / Mail us
-          </p>
-          <p className="mt-6 max-w-sm text-sm leading-7 text-white/65">
-            Project briefs, quote requests, and partnership enquiries — straight to our team.
-          </p>
-
-          <a
-            href={contact.emailHref}
-            className="group mt-10 block border-t border-white/15 pt-6"
-          >
-            <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-white/45">
-              Drop us a line
-            </p>
-            <p className="mt-3 font-display text-[clamp(1.5rem,2.5vw,2.5rem)] leading-tight tracking-tight text-[var(--paper)] transition group-hover:text-[var(--gold)]">
-              {contact.email}
-            </p>
-            <span className="mt-5 inline-flex items-center gap-2 text-[11px] tracking-[0.25em] uppercase text-white/70 transition group-hover:text-[var(--gold)]">
-              Send a message <ArrowUpRight size={14} />
-            </span>
-          </a>
-
-          <div className="mt-8 grid gap-3 border-t border-white/15 pt-6 text-sm text-white/70">
-            <a href={contact.phoneHref} className="flex items-center gap-3">
-              <Phone size={14} className="text-[var(--gold)]" />
-              {contact.phone}
-            </a>
-            <div className="flex items-start gap-3">
-              <MapPin size={14} className="mt-1 shrink-0 text-[var(--gold)]" />
-              <span className="leading-6">{contact.address}</span>
-            </div>
-          </div>
-
-          {/* subtle gold band at bottom */}
-          <div className="-mx-10 mt-10 h-[3px] w-[calc(100%+5rem)] bg-gradient-to-r from-[var(--gold)]/80 via-[var(--gold)] to-[var(--gold)]/40 md:-mx-12 md:w-[calc(100%+6rem)]" />
-        </div>
+        <TeamImage />
       </Reveal>
+    </div>
+  );
+}
+
+function TeamImage() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const y = useTransform(scrollYProgress, [0, 1], ["-4%", "4%"]);
+  return (
+    <div ref={ref} className="lg:sticky lg:top-32">
+      <div className="relative overflow-hidden rounded-sm border border-[color:var(--line)]">
+        <motion.div style={{ y }} className="relative aspect-[4/5] w-full">
+          <Image
+            src="/team.png"
+            alt="Chams Construction team on site"
+            fill
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            className="object-cover"
+            priority={false}
+          />
+        </motion.div>
+        {/* corner marks */}
+        <div className="pointer-events-none absolute inset-4 border border-white/25" />
+        <div className="absolute left-5 top-5 font-mono text-[10px] tracking-[0.3em] uppercase text-white/85">
+          / The crew
+        </div>
+        <div className="absolute bottom-5 right-5 font-mono text-[10px] tracking-[0.3em] uppercase text-white/85">
+          Singapore · 2025
+        </div>
+      </div>
+      <div className="mt-4 flex items-center justify-between text-xs text-[var(--ash)]">
+        <p className="font-mono tracking-widest uppercase">/ Site supervisors &amp; trades</p>
+        <p className="font-mono tracking-widest uppercase">Chams Construction</p>
+      </div>
     </div>
   );
 }
@@ -733,7 +707,7 @@ export function AboutBlock() {
 export function VisionMissionValues() {
   return (
     <div className="grid gap-px overflow-hidden rounded-sm border border-[color:var(--line)] bg-[color:var(--line)] lg:grid-cols-3">
-      {visionMission.map((item, i) => (
+      {visionMissionValues.map((item, i) => (
         <Reveal key={item.key} delay={i * 0.08} className="bg-[var(--paper)]">
           <div className="h-full p-10">
             <div className="flex items-center justify-between">
@@ -749,33 +723,6 @@ export function VisionMissionValues() {
           </div>
         </Reveal>
       ))}
-      <Reveal delay={0.24} className="bg-[var(--paper)]">
-        <div className="h-full p-10">
-          <div className="flex items-center justify-between">
-            <p className="font-mono text-[11px] tracking-[0.25em] uppercase text-[var(--gold-deep)]">
-              / 03
-            </p>
-            <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-[var(--ash)]">
-              Core values
-            </span>
-          </div>
-          <h3 className="mt-8 font-display text-3xl leading-tight">Core values.</h3>
-          <ul className="mt-5 space-y-3">
-            {coreValues.map((v) => (
-              <li
-                key={v.title}
-                className="flex items-baseline gap-3 border-b border-[color:var(--line-soft)] pb-2 text-sm leading-6"
-              >
-                <span className="size-1.5 shrink-0 translate-y-1.5 rounded-full bg-[var(--gold)]" />
-                <span>
-                  <span className="font-semibold text-[var(--navy)]">{v.title}</span>{" "}
-                  <span className="text-[var(--ash)]">— {v.text}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </Reveal>
     </div>
   );
 }
@@ -806,39 +753,183 @@ export function CapabilityStrip() {
 }
 
 // ─────────────────────────────────────────────────────────────
-// Services overview (used on Home)
+// Services overview (used on Home) — two stacked blocks with
+// auto-cycling image slideshow tied to active service
 // ─────────────────────────────────────────────────────────────
-export function ServicesPreview() {
-  return (
-    <div className="grid gap-px overflow-hidden rounded-sm border border-[color:var(--line)] bg-[color:var(--line)] lg:grid-cols-2">
-      {serviceCategories.map((cat, i) => (
-        <Reveal key={cat.key} delay={i * 0.1} className="bg-[var(--paper)]">
-          <Link href={`/services#${cat.key}`} className="group block h-full p-10">
-            <p className="eyebrow">{cat.label}</p>
-            <h3 className="mt-5 font-display text-4xl leading-tight md:text-5xl">{cat.title}</h3>
-            <p className="mt-4 max-w-md text-base leading-7 text-[var(--ash)]">{cat.intro}</p>
-            <ul className="mt-8 space-y-2">
-              {cat.services.map((s) => (
-                <li
-                  key={s.title}
-                  className="flex items-center justify-between border-b border-[color:var(--line-soft)] py-3 text-base"
-                >
-                  <span className="flex items-center gap-3">
-                    <s.icon size={16} className="text-[var(--gold)]" />
+const SLIDESHOW_INTERVAL = 1600;
+
+function ServicePreviewBlock({
+  categoryKey,
+  reversed = false,
+}: {
+  categoryKey: string;
+  reversed?: boolean;
+}) {
+  const category = serviceCategories.find((c) => c.key === categoryKey);
+  const [active, setActive] = useState(0);
+  const blockRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(blockRef, { once: false, margin: "-25%" });
+
+  useEffect(() => {
+    if (!inView || !category) return;
+    const id = setInterval(() => {
+      setActive((i) => (i + 1) % category.services.length);
+    }, SLIDESHOW_INTERVAL);
+    return () => clearInterval(id);
+  }, [inView, category]);
+
+  if (!category) return null;
+  const services = category.services;
+  const activeService = services[active];
+
+  const Info = (
+    <div className="flex flex-col p-8 md:p-12">
+      <div className="flex items-center justify-between">
+        <p className="eyebrow">{category.label}</p>
+        <span className="font-mono text-[11px] tracking-[0.25em] uppercase text-[var(--ash)]">
+          {String(active + 1).padStart(2, "0")} / {String(services.length).padStart(2, "0")}
+        </span>
+      </div>
+      <h3 className="mt-5 font-display text-[clamp(1.85rem,3.5vw,3rem)] leading-[1.05] tracking-tight">
+        {category.title}
+      </h3>
+      <p className="mt-4 max-w-md text-base leading-7 text-[var(--ash)]">{category.intro}</p>
+
+      <ul className="mt-8 space-y-1 border-t border-[color:var(--line)] pt-2">
+        {services.map((s, i) => {
+          const isActive = i === active;
+          return (
+            <li key={s.title}>
+              <button
+                type="button"
+                onClick={() => setActive(i)}
+                className="group flex w-full items-center justify-between gap-4 border-b border-[color:var(--line-soft)] py-3 text-left text-base transition"
+              >
+                <span className="flex flex-1 items-center gap-4">
+                  <span
+                    className={`relative h-px shrink-0 transition-all duration-500 ${
+                      isActive ? "w-10 bg-[var(--gold)]" : "w-4 bg-[var(--ash)]/40"
+                    }`}
+                  />
+                  <s.icon
+                    size={16}
+                    className={isActive ? "text-[var(--gold)]" : "text-[var(--ash)]"}
+                  />
+                  <span
+                    className={
+                      isActive
+                        ? "font-semibold text-[var(--navy)]"
+                        : "text-[var(--navy)]/70 group-hover:text-[var(--navy)]"
+                    }
+                  >
                     {s.title}
                   </span>
-                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--ash)]">
-                    {String(cat.services.indexOf(s) + 1).padStart(2, "0")}
-                  </span>
-                </li>
-              ))}
-            </ul>
-            <span className="mt-8 inline-flex items-center gap-2 border-b border-[var(--ink)] pb-1 text-sm transition group-hover:gap-3">
-              Open category <ArrowUpRight size={14} />
-            </span>
-          </Link>
-        </Reveal>
+                </span>
+                <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--ash)]">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+
+      <div className="mt-8">
+        <Link
+          href={`/services#${category.key}`}
+          className="group inline-flex items-center gap-2 border-b border-[var(--navy)] pb-1 text-sm font-medium text-[var(--navy)] transition hover:gap-3"
+        >
+          Open category <ArrowUpRight size={14} />
+        </Link>
+      </div>
+    </div>
+  );
+
+  const Slideshow = (
+    <div className="relative min-h-[360px] overflow-hidden bg-[var(--navy)] md:min-h-[520px]">
+      {services.map((s, i) => (
+        <motion.div
+          key={s.title}
+          initial={false}
+          animate={{ opacity: i === active ? 1 : 0, scale: i === active ? 1 : 1.04 }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          className="absolute inset-0"
+        >
+          <Image
+            src={s.image}
+            alt={s.title}
+            fill
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            className="object-cover"
+            priority={i === 0}
+          />
+        </motion.div>
       ))}
+
+      {/* Gradient overlay for text legibility */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-black/30" />
+
+      {/* Corner marks */}
+      <div className="absolute left-4 top-4 font-mono text-[9px] tracking-[0.25em] uppercase text-white/85 md:left-5 md:top-5 md:text-[10px] md:tracking-[0.3em]">
+        / Now showing
+      </div>
+      <div className="absolute right-4 top-4 hidden font-mono text-[9px] tracking-[0.25em] uppercase text-white/85 sm:block md:right-5 md:top-5 md:text-[10px] md:tracking-[0.3em]">
+        {category.title}
+      </div>
+
+      {/* Active caption */}
+      <motion.div
+        key={activeService.title}
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        className="absolute bottom-12 left-4 right-4 text-white md:bottom-5 md:left-5 md:right-5"
+      >
+        <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--gold)]">
+          / {String(active + 1).padStart(2, "0")}
+        </p>
+        <p className="mt-2 font-display text-xl leading-tight md:text-3xl">
+          {activeService.title}
+        </p>
+        <p className="mt-2 max-w-md text-[13px] leading-5 text-white/80 md:text-sm md:leading-6">
+          {activeService.description}
+        </p>
+      </motion.div>
+
+      {/* Progress dots */}
+      <div className="absolute bottom-4 left-4 flex gap-1.5 md:bottom-5 md:left-auto md:right-5">
+        {services.map((_, i) => (
+          <span
+            key={i}
+            className={`h-1 transition-all duration-500 ${
+              i === active ? "w-6 bg-[var(--gold)]" : "w-2 bg-white/40"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+
+  return (
+    <Reveal>
+      <div
+        ref={blockRef}
+        className={`grid overflow-hidden rounded-sm border border-[color:var(--line)] bg-[var(--paper)] lg:grid-cols-2 ${
+          reversed ? "lg:[&>*:first-child]:order-2" : ""
+        }`}
+      >
+        {Info}
+        {Slideshow}
+      </div>
+    </Reveal>
+  );
+}
+
+export function ServicesPreview() {
+  return (
+    <div className="space-y-10">
+      <ServicePreviewBlock categoryKey="commercial" />
+      <ServicePreviewBlock categoryKey="interior" reversed />
     </div>
   );
 }
@@ -850,12 +941,12 @@ export function ServiceCategoryBlock({ categoryKey }: { categoryKey: string }) {
   const category = serviceCategories.find((c) => c.key === categoryKey);
   if (!category) return null;
   return (
-    <section id={category.key} className="border-t border-[color:var(--line)] py-24 md:py-32">
+    <section id={category.key} className="border-t border-[color:var(--line)] py-16 md:py-32">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
         <div className="grid gap-12 lg:grid-cols-[0.45fr_1fr]">
           <Reveal>
             <p className="eyebrow">{category.label}</p>
-            <h2 className="mt-5 font-display text-5xl leading-[0.98] md:text-7xl">
+            <h2 className="mt-5 font-display text-4xl leading-[1.04] md:text-7xl md:leading-[0.98]">
               {category.title}
             </h2>
             <p className="mt-6 max-w-md text-lg leading-8 text-[var(--ash)]">{category.intro}</p>
@@ -924,33 +1015,115 @@ function ServiceRow({ service, index, categoryKey }: { service: Service; index: 
 }
 
 // ─────────────────────────────────────────────────────────────
-// WorkGrid — editorial cards
+// WorkGrid — horizontal carousel, single card in view + arrow nav
 // ─────────────────────────────────────────────────────────────
 export function WorkGrid() {
+  const [active, setActive] = useState(0);
+  const total = workItems.length;
+  const item = workItems[active];
+
+  const go = (dir: 1 | -1) => {
+    setActive((i) => (i + dir + total) % total);
+  };
+
   return (
-    <div className="grid gap-px overflow-hidden rounded-sm border border-[color:var(--line)] bg-[color:var(--line)] md:grid-cols-2">
-      {workItems.map((item, i) => (
-        <Reveal key={item.title} delay={(i % 2) * 0.1} className="bg-[var(--paper)]">
-          <div className="group relative h-full overflow-hidden p-8">
-            <div className="image-frame relative mb-6 aspect-[4/3] overflow-hidden rounded-sm">
-              <div className="absolute inset-4 border border-[var(--ink)]/15" />
-              <div className="absolute left-4 top-4 font-mono text-[10px] tracking-[0.25em] uppercase text-[var(--ink)]/50">
-                / 0{i + 1}
+    <Reveal>
+      <div className="overflow-hidden rounded-sm border border-[color:var(--line)] bg-[var(--paper)]">
+        {/* Carousel viewport */}
+        <div className="relative overflow-hidden">
+          <motion.div
+            animate={{ x: `-${active * 100}%` }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            className="flex"
+          >
+            {workItems.map((w, i) => (
+              <div key={w.title} className="grid w-full shrink-0 grid-cols-1 gap-0 lg:grid-cols-[1.05fr_1fr]">
+                {/* Image */}
+                <div className="image-frame relative aspect-[4/3] overflow-hidden lg:aspect-auto lg:min-h-[520px]">
+                  <div className="absolute inset-4 border border-[var(--navy)]/15" />
+                  <div className="absolute left-4 top-4 font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--navy)]/55">
+                    / {String(i + 1).padStart(2, "0")} of {String(total).padStart(2, "0")}
+                  </div>
+                  <div className="absolute bottom-4 right-4 font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--navy)]/55">
+                    {w.category}
+                  </div>
+                </div>
+                {/* Info */}
+                <div className="flex flex-col justify-between gap-8 p-8 md:p-12 lg:p-14">
+                  <div>
+                    <p className="eyebrow">{w.category}</p>
+                    <h3 className="mt-5 font-display text-3xl leading-tight md:text-5xl">
+                      {w.title}
+                    </h3>
+                    <p className="mt-5 max-w-md text-base leading-7 text-[var(--ash)]">
+                      {w.text}
+                    </p>
+                  </div>
+                  <div>
+                    <Link
+                      href="/our-work"
+                      className="group inline-flex items-center gap-2 border-b border-[var(--navy)] pb-1 text-sm font-medium text-[var(--navy)] transition hover:gap-3"
+                    >
+                      View project <ArrowUpRight size={14} />
+                    </Link>
+                  </div>
+                </div>
               </div>
-              <div className="absolute bottom-4 right-4 font-mono text-[10px] tracking-[0.25em] uppercase text-[var(--ink)]/50">
-                {item.category}
-              </div>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Controls */}
+        <div className="flex items-center justify-between gap-6 border-t border-[color:var(--line)] px-6 py-5 md:px-10">
+          {/* Counter + progress */}
+          <div className="flex items-center gap-5">
+            <p className="font-mono text-sm tracking-widest text-[var(--navy)]">
+              <span className="text-[var(--gold-deep)]">
+                {String(active + 1).padStart(2, "0")}
+              </span>
+              <span className="mx-2 text-[var(--ash)]">/</span>
+              <span className="text-[var(--ash)]">{String(total).padStart(2, "0")}</span>
+            </p>
+            <div className="hidden h-px w-32 bg-[color:var(--line)] sm:block md:w-56">
+              <motion.div
+                animate={{ width: `${((active + 1) / total) * 100}%` }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                className="h-px bg-[var(--gold)]"
+              />
             </div>
-            <p className="eyebrow">{item.category}</p>
-            <h3 className="mt-3 font-display text-3xl leading-tight md:text-4xl">{item.title}</h3>
-            <p className="mt-3 max-w-md text-base leading-7 text-[var(--ash)]">{item.text}</p>
-            <span className="mt-6 inline-flex items-center gap-2 border-b border-[var(--ink)] pb-1 text-sm transition group-hover:gap-3">
-              View project <ArrowUpRight size={14} />
-            </span>
+            <p className="hidden text-xs uppercase tracking-[0.25em] text-[var(--ash)] md:block">
+              {item.category}
+            </p>
           </div>
-        </Reveal>
-      ))}
-    </div>
+
+          {/* Arrows */}
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => go(-1)}
+              aria-label="Previous project"
+              className="group grid size-12 place-items-center rounded-full border border-[color:var(--line)] text-[var(--navy)] transition hover:border-[var(--navy)] hover:bg-[var(--navy)] hover:text-[var(--paper)]"
+            >
+              <ArrowUpRight
+                size={16}
+                className="-rotate-[225deg] transition group-hover:-translate-x-0.5 group-hover:-translate-y-0.5"
+              />
+            </button>
+            <button
+              type="button"
+              onClick={() => go(1)}
+              aria-label="Next project"
+              className="group grid size-12 place-items-center rounded-full bg-[var(--navy)] text-[var(--paper)] transition hover:bg-[var(--gold)] hover:text-[var(--navy)]"
+            >
+              <ArrowUpRight
+                size={16}
+                className="rotate-45 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              />
+            </button>
+          </div>
+        </div>
+      </div>
+    </Reveal>
   );
 }
 
@@ -995,7 +1168,7 @@ export function StatBlock() {
       <div className="mx-auto max-w-[1400px]">
         <Reveal>
           <p className="eyebrow text-white/40">/ Track record</p>
-          <h2 className="mt-4 font-display text-5xl leading-[0.98] md:text-7xl">
+          <h2 className="mt-4 font-display text-4xl leading-[1.04] md:text-7xl md:leading-[0.98]">
             By the numbers,<br />
             <span className="font-display-italic text-[var(--gold)]">consistently delivered.</span>
           </h2>
@@ -1021,22 +1194,165 @@ export function StatBlock() {
 }
 
 // ─────────────────────────────────────────────────────────────
-// Principles
+// Principles — circle nodes connected by an animated path
+// drawn from step 1 → 4 as the section scrolls into view
 // ─────────────────────────────────────────────────────────────
 export function Principles() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start 75%", "end 60%"],
+  });
+
+  const arrowPctH = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+  const arrowPctV = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+  const arrowOpacity = useTransform(scrollYProgress, [0, 0.05, 0.95, 1], [0, 1, 1, 0]);
+
   return (
-    <div className="grid gap-px overflow-hidden rounded-sm border border-[color:var(--line)] bg-[color:var(--line)] md:grid-cols-2 lg:grid-cols-4">
-      {principles.map((p, i) => (
-        <Reveal key={p.title} delay={i * 0.08} className="bg-[var(--paper)]">
-          <div className="h-full p-8">
-            <p className="font-mono text-[11px] tracking-[0.25em] uppercase text-[var(--gold)]">
-              / {p.number}
-            </p>
-            <h3 className="mt-6 font-display text-3xl">{p.title}</h3>
-            <p className="mt-3 text-sm leading-7 text-[var(--ash)]">{p.text}</p>
+    <div ref={ref} className="relative">
+      {/* Desktop — horizontal flow */}
+      <div className="hidden md:block">
+        <div className="relative">
+          {/* Circles row */}
+          <div className="relative z-10 grid grid-cols-4 gap-6">
+            {principles.map((p, i) => (
+              <PrincipleStep
+                key={p.title}
+                index={i}
+                total={principles.length}
+                number={p.number}
+                title={p.title}
+                text={p.text}
+                scrollYProgress={scrollYProgress}
+                layout="horizontal"
+              />
+            ))}
           </div>
-        </Reveal>
-      ))}
+
+          {/* Connector path — centered on the circle row */}
+          <div className="pointer-events-none absolute left-0 right-0 top-7 z-0 -translate-y-1/2 px-[12.5%]">
+            <div className="relative h-px w-full bg-[color:var(--line)]">
+              <motion.div
+                style={{ scaleX: scrollYProgress, transformOrigin: "left center" }}
+                className="absolute inset-0 h-px bg-[var(--gold)]"
+              />
+              <motion.div
+                style={{ left: arrowPctH, opacity: arrowOpacity }}
+                className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2"
+              >
+                <div className="grid size-7 place-items-center rounded-full bg-[var(--gold)] text-[var(--navy)] shadow-[0_0_0_4px_rgba(232,185,35,0.18)]">
+                  <ArrowUpRight size={14} className="rotate-45" />
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile — vertical flow */}
+      <div className="md:hidden">
+        <div className="relative pl-16">
+          {/* Vertical connector */}
+          <div className="pointer-events-none absolute left-7 top-7 bottom-7 w-px -translate-x-1/2 bg-[color:var(--line)]">
+            <motion.div
+              style={{ scaleY: scrollYProgress, transformOrigin: "top center" }}
+              className="absolute inset-0 w-px bg-[var(--gold)]"
+            />
+            <motion.div
+              style={{ top: arrowPctV, opacity: arrowOpacity }}
+              className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2"
+            >
+              <div className="grid size-7 place-items-center rounded-full bg-[var(--gold)] text-[var(--navy)] shadow-[0_0_0_4px_rgba(232,185,35,0.18)]">
+                <ArrowUpRight size={14} className="rotate-[135deg]" />
+              </div>
+            </motion.div>
+          </div>
+
+          <div className="space-y-10">
+            {principles.map((p, i) => (
+              <PrincipleStep
+                key={p.title}
+                index={i}
+                total={principles.length}
+                number={p.number}
+                title={p.title}
+                text={p.text}
+                scrollYProgress={scrollYProgress}
+                layout="vertical"
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PrincipleStep({
+  index,
+  total,
+  number,
+  title,
+  text,
+  scrollYProgress,
+  layout,
+}: {
+  index: number;
+  total: number;
+  number: string;
+  title: string;
+  text: string;
+  scrollYProgress: MotionValue<number>;
+  layout: "horizontal" | "vertical";
+}) {
+  const start = index / total;
+  const progress = useTransform(scrollYProgress, [start, start + 0.05], [0, 1]);
+
+  if (layout === "horizontal") {
+    return (
+      <div className="flex flex-col items-center text-center">
+        <PrincipleCircle number={number} progress={progress} />
+        <p className="mt-6 font-mono text-[11px] tracking-[0.25em] uppercase text-[var(--gold-deep)]">
+          / {number}
+        </p>
+        <h3 className="mt-3 font-display text-2xl leading-tight">{title}</h3>
+        <p className="mt-3 max-w-[18rem] text-sm leading-6 text-[var(--ash)]">{text}</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative">
+      <div className="absolute -left-16 top-0">
+        <PrincipleCircle number={number} progress={progress} />
+      </div>
+      <p className="font-mono text-[11px] tracking-[0.25em] uppercase text-[var(--gold-deep)]">
+        / {number}
+      </p>
+      <h3 className="mt-2 font-display text-2xl leading-tight">{title}</h3>
+      <p className="mt-2 text-sm leading-6 text-[var(--ash)]">{text}</p>
+    </div>
+  );
+}
+
+function PrincipleCircle({
+  number,
+  progress,
+}: {
+  number: string;
+  progress: MotionValue<number>;
+}) {
+  const bgOpacity = useTransform(progress, [0, 1], [0, 1]);
+  const ringScale = useTransform(progress, [0, 1], [0.92, 1]);
+  return (
+    <div className="relative grid size-14 place-items-center rounded-full border-2 border-[var(--navy)] bg-[var(--paper)]">
+      <motion.div
+        style={{ opacity: bgOpacity, scale: ringScale }}
+        className="absolute inset-0 rounded-full bg-[var(--gold)]"
+      />
+      <span className="relative font-display text-sm font-bold tracking-tight text-[var(--navy)]">
+        {number}
+      </span>
     </div>
   );
 }

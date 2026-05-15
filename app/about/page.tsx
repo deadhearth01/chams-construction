@@ -69,12 +69,12 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="px-5 py-24 md:px-10 md:py-32">
+      <section className="px-5 py-16 md:px-10 md:py-32">
         <div className="mx-auto max-w-[1400px]">
           <div className="grid gap-12 lg:grid-cols-[0.55fr_1fr] lg:items-end">
             <Reveal>
               <p className="eyebrow">/ Sectors</p>
-              <h2 className="mt-5 font-display text-5xl leading-[0.98] md:text-7xl">
+              <h2 className="mt-5 font-display text-4xl leading-[1.04] md:text-7xl md:leading-[0.98]">
                 Three sectors,<br />
                 <span className="font-display-italic text-[var(--gold-deep)]">one team.</span>
               </h2>
@@ -94,11 +94,11 @@ export default function AboutPage() {
 
       <StatBlock />
 
-      <section className="px-5 py-24 md:px-10 md:py-32">
+      <section className="px-5 py-16 md:px-10 md:py-32">
         <div className="mx-auto max-w-[1400px]">
           <Reveal>
             <p className="eyebrow">/ Principles</p>
-            <h2 className="mt-5 max-w-3xl font-display text-5xl leading-[0.98] md:text-7xl">
+            <h2 className="mt-5 max-w-3xl font-display text-4xl leading-[1.04] md:text-7xl md:leading-[0.98]">
               What every Chams<br />
               <span className="font-display-italic text-[var(--gold-deep)]">project lives by.</span>
             </h2>

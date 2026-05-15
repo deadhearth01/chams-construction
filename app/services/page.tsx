@@ -28,7 +28,7 @@ export default function ServicesPage() {
         <ServiceCategoryBlock key={cat.key} categoryKey={cat.key} />
       ))}
 
-      <section className="px-5 py-24 md:px-10 md:py-32">
+      <section className="px-5 py-16 md:px-10 md:py-32">
         <div className="mx-auto max-w-[1400px]">
           <Reveal>
             <div className="rounded-sm border border-[color:var(--line)] bg-[var(--paper)] p-10 md:p-16">
