@@ -57,7 +57,7 @@ function userTemplate(data: ContactPayload) {
               </td>
             </tr>
           </table>
-          <p style="margin:16px 0 0;font-size:12px;color:#94a3b8;">This is an automated confirmation. Replies go to enquiry@chamsconstruction.com.</p>
+          <p style="margin:16px 0 0;font-size:12px;color:#94a3b8;">This is an automated confirmation. Replies go to contact@chamsconstruction.com.</p>
         </td>
       </tr>
     </table>
