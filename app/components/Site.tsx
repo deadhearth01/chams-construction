@@ -391,7 +391,18 @@ export function Footer() {
       </div>
 
       <div className="bg-[var(--navy)] px-5 py-5 text-[var(--paper)] md:px-10">
-        <div className="mx-auto flex max-w-[1400px] flex-col gap-3 text-sm text-white/75 md:flex-row md:items-center md:justify-between">
+        <p className="w-full text-center text-[11px] tracking-[0.16em] uppercase text-white/70">
+          Crafted with ♥ love{" "}
+          <a
+            href="https://www.theavni.studio/"
+            target="_blank"
+            rel="noreferrer"
+            className="text-white transition hover:text-[var(--gold)]"
+          >
+            AVNI Studio
+          </a>
+        </p>
+        <div className="mx-auto mt-3 flex max-w-[1400px] flex-col gap-3 text-sm text-white/75 md:flex-row md:items-center md:justify-between">
           <p>© {new Date().getFullYear()} Chams Construction Pte. Ltd. All rights reserved.</p>
           <p className="font-mono text-xs tracking-[0.25em] uppercase text-white/55">
             Singapore — 648363
@@ -522,6 +533,43 @@ export function ImagePlaceholder({ label, tall = false }: { label: string; tall?
 }
 
 // ─────────────────────────────────────────────────────────────
+// CtaImage — full-bleed image used inside the dark CTA card
+// File: /public/cta.jpg (warm-tone fallback shows if absent)
+// ─────────────────────────────────────────────────────────────
+export function CtaImage() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const y = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"]);
+
+  return (
+    <div ref={ref} className="relative isolate overflow-hidden rounded-sm">
+      {/* warm fallback */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-br from-[#1f2a4a] via-[#3c2a18] to-[#c9941a]" />
+
+      {/* real image */}
+      <motion.div
+        style={{ y, backgroundImage: "url('/cta.png')" }}
+        className="absolute inset-0 z-[1] bg-cover bg-center bg-no-repeat"
+      />
+
+      {/* gradient overlay for caption legibility */}
+      <div className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-t from-[var(--navy-deep)]/80 via-transparent to-black/25" />
+
+      {/* spacer */}
+      <div className="relative z-[3] aspect-[16/7] min-h-[260px]" />
+
+      {/* corner marks */}
+      <div className="absolute left-5 top-5 z-[3] font-mono text-[10px] tracking-[0.3em] uppercase text-white/85">
+        Chams · Site
+      </div>
+      <div className="absolute bottom-5 right-5 z-[3] font-mono text-[10px] tracking-[0.3em] uppercase text-white/85">
+        Reach out — 24 hr response
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
 // HomeHero — full bleed with parallax stat strip
 // ─────────────────────────────────────────────────────────────
 export function HomeHero() {
@@ -567,13 +615,13 @@ export function HomeHero() {
               </Reveal>
               <div className="mt-5 md:mt-6">
                 <SplitHeadline
-                  text="Construction works,"
-                  className="font-display block text-[clamp(2rem,7.5vw,4.75rem)] leading-[1.02] tracking-tight text-[var(--navy)]"
+                  text="Building Landmarks"
+                  className="font-display block text-[clamp(1.85rem,6.5vw,4.5rem)] leading-[1.02] tracking-tight text-[var(--navy)]"
                 />
                 <SplitHeadline
-                  text="done right."
+                  text="with Modern Expertise."
                   delay={0.25}
-                  className="font-display-italic mt-1 block text-[clamp(2rem,7.5vw,4.75rem)] leading-[1.02] tracking-tight text-[var(--gold-deep)]"
+                  className="font-display-italic mt-1 block text-[clamp(1.85rem,6.5vw,4.5rem)] leading-[1.02] tracking-tight text-[var(--gold-deep)]"
                 />
               </div>
               <Reveal delay={0.5}>
@@ -690,7 +738,7 @@ function TeamImage() {
           / The crew
         </div>
         <div className="absolute bottom-5 right-5 font-mono text-[10px] tracking-[0.3em] uppercase text-white/85">
-          Singapore · 2025
+          
         </div>
       </div>
       <div className="mt-4 flex items-center justify-between text-xs text-[var(--ash)]">

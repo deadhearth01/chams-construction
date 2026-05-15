@@ -1,9 +1,11 @@
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import {
   AboutBlock,
   ButtonLink,
+  CtaImage,
   FeaturedTags,
   HomeHero,
-  ImagePlaceholder,
   PageShell,
   Principles,
   Reveal,
@@ -12,6 +14,18 @@ import {
   VisionMissionValues,
   WorkGrid,
 } from "./components/Site";
+
+function GoldCta() {
+  return (
+    <Link
+      href="/contact-us"
+      className="group inline-flex w-full items-center justify-center gap-3 rounded-full bg-[var(--gold)] px-6 py-3 text-[12px] tracking-[0.2em] uppercase text-[var(--navy)] btn-shadow transition hover:bg-[var(--paper)] sm:w-auto sm:justify-start"
+    >
+      Start a project
+      <ArrowUpRight size={14} className="transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+    </Link>
+  );
+}
 
 export default function Home() {
   return (
@@ -123,12 +137,12 @@ export default function Home() {
                     sized to deliver it.
                   </p>
                   <div className="mt-7 md:mt-8">
-                    <ButtonLink href="/contact-us">Start a project</ButtonLink>
+                    <GoldCta />
                   </div>
                 </div>
               </div>
               <div className="mt-12 md:mt-16">
-                <ImagePlaceholder label="Reach out — 24 hr response" />
+                <CtaImage />
               </div>
             </div>
           </Reveal>
