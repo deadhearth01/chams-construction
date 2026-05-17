@@ -945,25 +945,35 @@ function ChamsLetterCard({
         / 0{index + 1} — {letter}
       </p>
 
-      {/* Word letter-by-letter reveal */}
-      <h3 className="mt-3 font-display text-[clamp(1.85rem,7vw,4.5rem)] leading-[1] tracking-tight md:mt-4">
+      {/* Word letter-by-letter reveal — single parent observer */}
+      <motion.h3
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.25 }}
+        variants={{
+          hidden: {},
+          visible: { transition: { staggerChildren: 0.05, delayChildren: 0.15 } },
+        }}
+        className="mt-3 font-display text-[clamp(1.85rem,7vw,4.5rem)] leading-[1] tracking-tight md:mt-4"
+      >
         {letters.map((char, i) => (
           <motion.span
             key={i}
-            initial={{ opacity: 0, y: 30, rotateX: -40 }}
-            whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{
-              duration: 0.7,
-              delay: 0.1 + i * 0.06,
-              ease: [0.22, 1, 0.36, 1],
+            variants={{
+              hidden: { opacity: 0, y: 30, rotateX: -40 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                rotateX: 0,
+                transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] },
+              },
             }}
-            className="inline-block"
+            className="inline-block whitespace-pre"
           >
             {char === " " ? " " : char}
           </motion.span>
         ))}
-      </h3>
+      </motion.h3>
 
       <motion.p
         initial={{ opacity: 0, y: 20 }}
