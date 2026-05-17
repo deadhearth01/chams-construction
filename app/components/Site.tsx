@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowUpRight,
+  Check,
   ChevronDown,
   Mail,
   MapPin,
@@ -29,6 +30,9 @@ import {
   sectorCards,
   aboutBullets,
   visionMissionValues,
+  chamsPhilosophy,
+  aboutWhatWeDo,
+  aboutCommitment,
   type Service,
 } from "../data";
 
@@ -772,6 +776,395 @@ export function VisionMissionValues() {
         </Reveal>
       ))}
     </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// ChamsAcronym — scroll-pinned letter board + per-letter reveal
+// Used on /about page
+// ─────────────────────────────────────────────────────────────
+export function ChamsAcronym() {
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+
+  return (
+    <section
+      ref={wrapRef}
+      className="relative bg-[var(--navy)] text-[var(--paper)]"
+    >
+      {/* decorative noise */}
+      <div className="pointer-events-none absolute inset-0 opacity-[0.06] [background-image:radial-gradient(circle_at_20%_20%,#fff_0,transparent_50%)]" />
+
+      <div className="mx-auto max-w-[1400px] px-5 pt-16 pb-20 md:px-10 md:pt-32 md:pb-32">
+        <Reveal>
+          <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--gold)] md:text-[11px]">
+            / Our strength
+          </p>
+          <h2 className="mt-4 font-display text-3xl leading-[1.04] tracking-tight md:mt-5 md:text-7xl md:leading-[0.98]">
+            The CHAMS<br />
+            <span className="font-display-italic text-[var(--gold)]">philosophy.</span>
+          </h2>
+          <p className="mt-5 max-w-2xl text-sm leading-6 text-white/70 md:mt-6 md:text-lg md:leading-8">
+            Five letters. One standard. Every project at Chams Construction is shaped
+            by these five principles — scroll to reveal each one.
+          </p>
+        </Reveal>
+
+        {/* Mobile sticky letter strip */}
+        <div className="sticky top-24 z-20 -mx-5 mt-10 border-y border-white/10 bg-[var(--navy)]/95 px-5 py-3 backdrop-blur lg:hidden">
+          <div className="flex items-center justify-between">
+            <div className="flex items-baseline gap-3">
+              {chamsPhilosophy.map((p, i) => {
+                const isActive = i === active;
+                return (
+                  <motion.span
+                    key={p.letter}
+                    animate={{
+                      color: isActive ? "var(--gold)" : "rgba(255,255,255,0.22)",
+                      scale: isActive ? 1.15 : 1,
+                    }}
+                    transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                    className="font-display text-2xl leading-none tracking-tight"
+                  >
+                    {p.letter}
+                  </motion.span>
+                );
+              })}
+            </div>
+            <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-white/55">
+              {String(active + 1).padStart(2, "0")} / 05
+            </p>
+          </div>
+          <motion.div
+            animate={{ width: `${((active + 1) / chamsPhilosophy.length) * 100}%` }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-2 h-px bg-[var(--gold)]"
+          />
+        </div>
+
+        <div className="mt-12 grid gap-12 md:mt-16 lg:mt-20 lg:grid-cols-[0.55fr_1fr] lg:items-start">
+          {/* Desktop sticky letter board */}
+          <div className="hidden lg:sticky lg:top-32 lg:block lg:self-start">
+            <div className="relative">
+              <div className="flex flex-col items-start gap-2">
+                {chamsPhilosophy.map((p, i) => {
+                  const isActive = i === active;
+                  return (
+                    <div key={p.letter} className="relative flex items-baseline gap-4">
+                      <motion.span
+                        animate={{
+                          color: isActive ? "var(--gold)" : "rgba(255,255,255,0.18)",
+                          x: isActive ? 8 : 0,
+                        }}
+                        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                        className="font-display block text-[clamp(4rem,12vw,9rem)] leading-[0.85] tracking-tight"
+                      >
+                        {p.letter}
+                      </motion.span>
+                      <motion.span
+                        animate={{ opacity: isActive ? 1 : 0, x: isActive ? 0 : -8 }}
+                        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                        className="font-display-italic text-2xl text-[var(--gold)] md:text-3xl"
+                      >
+                        — {p.word}
+                      </motion.span>
+                    </div>
+                  );
+                })}
+              </div>
+              <p className="mt-8 font-mono text-[11px] tracking-[0.28em] uppercase text-white/45">
+                {String(active + 1).padStart(2, "0")} / 05
+              </p>
+            </div>
+          </div>
+
+          {/* Letter cards */}
+          <div className="space-y-16 md:space-y-20">
+            {chamsPhilosophy.map((p, i) => (
+              <ChamsLetterCard
+                key={p.letter}
+                index={i}
+                letter={p.letter}
+                word={p.word}
+                text={p.text}
+                onEnter={() => setActive(i)}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ChamsLetterCard({
+  index,
+  letter,
+  word,
+  text,
+  onEnter,
+}: {
+  index: number;
+  letter: string;
+  word: string;
+  text: string;
+  onEnter: () => void;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { margin: "-45% 0px -45% 0px" });
+
+  useEffect(() => {
+    if (inView) onEnter();
+  }, [inView, onEnter]);
+
+  const letters = word.split("");
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 60 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+      className="relative border-l border-white/10 pl-5 md:pl-10"
+    >
+      {/* Mobile-only giant letter prefix */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.85, y: 20 }}
+        whileInView={{ opacity: 1, scale: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        className="lg:hidden"
+      >
+        <span className="font-display block text-[clamp(4rem,20vw,6rem)] leading-[0.85] tracking-tight text-[var(--gold)]">
+          {letter}
+        </span>
+      </motion.div>
+
+      <p className="mt-3 font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--gold)] md:mt-0 md:text-[11px]">
+        / 0{index + 1} — {letter}
+      </p>
+
+      {/* Word letter-by-letter reveal */}
+      <h3 className="mt-3 font-display text-[clamp(1.85rem,7vw,4.5rem)] leading-[1] tracking-tight md:mt-4">
+        {letters.map((char, i) => (
+          <motion.span
+            key={i}
+            initial={{ opacity: 0, y: 30, rotateX: -40 }}
+            whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{
+              duration: 0.7,
+              delay: 0.1 + i * 0.06,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            className="inline-block"
+          >
+            {char === " " ? " " : char}
+          </motion.span>
+        ))}
+      </h3>
+
+      <motion.p
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="mt-6 max-w-xl text-base leading-7 text-white/75 md:text-lg md:leading-8"
+      >
+        {text}
+      </motion.p>
+    </motion.div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// AboutIntro — copy block used at top of /about
+// ─────────────────────────────────────────────────────────────
+export function AboutIntro() {
+  return (
+    <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:items-start">
+      <div>
+        <Reveal>
+          <p className="eyebrow">/ Building with purpose</p>
+        </Reveal>
+        <Reveal delay={0.05}>
+          <h2 className="mt-5 font-display text-4xl leading-[1.04] tracking-tight md:text-6xl md:leading-[1.02]">
+            Building with purpose.<br />
+            <span className="font-display-italic text-[var(--gold-deep)]">
+              Delivering with precision.
+            </span>
+          </h2>
+        </Reveal>
+      </div>
+      <div className="space-y-6 text-base leading-7 text-[var(--ash)] md:text-lg md:leading-8">
+        <Reveal delay={0.15}>
+          <p>
+            Chams Construction is a Singapore-based construction and renovation company
+            delivering high-quality solutions across interior works, commercial
+            construction, and M&amp;E services. Our approach is built on discipline,
+            technical expertise, and a commitment to excellence in every project.
+          </p>
+        </Reveal>
+        <Reveal delay={0.25}>
+          <p>
+            From small-scale renovations to complex commercial and industrial works, we
+            focus on safe, efficient, reliable construction tailored to our clients&apos;
+            needs.
+          </p>
+        </Reveal>
+        <Reveal delay={0.35}>
+          <p className="font-display-italic text-xl text-[var(--navy)] md:text-2xl">
+            Construction is not just about building structures — it is about building
+            trust, long-term value, and lasting relationships.
+          </p>
+        </Reveal>
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// OnSiteBoard — branded site signage image break
+// File: /public/about-team.png (warm fallback shows if absent)
+// ─────────────────────────────────────────────────────────────
+export function OnSiteBoard() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const y = useTransform(scrollYProgress, [0, 1], ["-5%", "5%"]);
+
+  return (
+    <div ref={ref} className="relative isolate overflow-hidden rounded-sm">
+      {/* warm fallback */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-br from-[#1a2654] via-[#3c2a18] to-[#c9941a]" />
+
+      {/* image */}
+      <motion.div
+        style={{ y, backgroundImage: "url('/about-team.png')" }}
+        className="absolute inset-0 z-[1] bg-cover bg-center bg-no-repeat"
+      />
+
+      {/* overlay */}
+      <div className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-t from-[var(--navy-deep)]/80 via-transparent to-black/20" />
+
+      {/* spacer */}
+      <div className="relative z-[3] aspect-[3/2] min-h-[320px] md:aspect-[16/7] md:min-h-[440px]" />
+
+      {/* caption */}
+      <div className="absolute left-5 top-5 z-[3] font-mono text-[10px] tracking-[0.3em] uppercase text-white/85 md:left-8 md:top-8">
+        / On site
+      </div>
+      <div className="absolute bottom-5 left-5 right-5 z-[3] flex items-end justify-between md:bottom-8 md:left-8 md:right-8">
+        <p className="font-display text-2xl leading-tight text-white md:text-4xl">
+          Built by Chams.<br />
+          <span className="font-display-italic text-[var(--gold)]">Backed by site teams.</span>
+        </p>
+        <p className="hidden font-mono text-[10px] tracking-[0.3em] uppercase text-white/85 md:block">
+          Singapore · 2025
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// AboutWhatWeDo — service list with numbered rows
+// ─────────────────────────────────────────────────────────────
+export function AboutWhatWeDo() {
+  return (
+    <div className="grid gap-12 lg:grid-cols-[0.55fr_1fr] lg:items-start">
+      <Reveal>
+        <p className="eyebrow">/ What we do</p>
+        <h2 className="mt-5 font-display text-4xl leading-[1.04] tracking-tight md:text-6xl md:leading-[1.02]">
+          A full-stack<br />
+          <span className="font-display-italic text-[var(--gold-deep)]">
+            construction partner.
+          </span>
+        </h2>
+        <p className="mt-6 max-w-md text-base leading-7 text-[var(--ash)] md:text-lg md:leading-8">
+          Seven disciplines, one supervised team — from first survey through final
+          handover.
+        </p>
+      </Reveal>
+
+      <div className="grid gap-px overflow-hidden rounded-sm border border-[color:var(--line)] bg-[color:var(--line)]">
+        {aboutWhatWeDo.map((item, i) => (
+          <Reveal key={item} delay={i * 0.05} className="bg-[var(--paper)]">
+            <div className="group flex items-center justify-between gap-6 px-6 py-5 md:px-8 md:py-6">
+              <div className="flex items-center gap-5">
+                <span className="font-mono text-[11px] tracking-[0.25em] text-[var(--gold-deep)]">
+                  / {String(i + 1).padStart(2, "0")}
+                </span>
+                <span className="font-display text-lg leading-tight text-[var(--navy)] md:text-2xl">
+                  {item}
+                </span>
+              </div>
+              <span className="h-px w-8 bg-[var(--ash)]/30 transition-all duration-500 group-hover:w-16 group-hover:bg-[var(--gold)]" />
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// AboutCommitment — checked bullets
+// ─────────────────────────────────────────────────────────────
+export function AboutCommitment() {
+  return (
+    <div className="grid gap-12 lg:grid-cols-[0.55fr_1fr] lg:items-start">
+      <Reveal>
+        <p className="eyebrow">/ Our commitment</p>
+        <h2 className="mt-5 font-display text-4xl leading-[1.04] tracking-tight md:text-6xl md:leading-[1.02]">
+          What every<br />
+          <span className="font-display-italic text-[var(--gold-deep)]">
+            project carries.
+          </span>
+        </h2>
+      </Reveal>
+
+      <ul className="grid gap-px overflow-hidden rounded-sm border border-[color:var(--line)] bg-[color:var(--line)] sm:grid-cols-2 lg:grid-cols-2">
+        {aboutCommitment.map((item, i) => (
+          <Reveal key={item} delay={i * 0.06} className="bg-[var(--paper)]">
+            <li className="flex items-start gap-4 p-6 md:p-8">
+              <span className="mt-1 grid size-8 shrink-0 place-items-center rounded-full border border-[var(--navy)] bg-[var(--paper)] text-[var(--navy)]">
+                <Check size={14} />
+              </span>
+              <span className="font-display text-lg leading-tight text-[var(--navy)] md:text-2xl">
+                {item}
+              </span>
+            </li>
+          </Reveal>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// AboutVision — pulled quote on warm bg
+// ─────────────────────────────────────────────────────────────
+export function AboutVision() {
+  return (
+    <Reveal>
+      <div className="relative overflow-hidden rounded-sm bg-[var(--navy)] px-6 py-16 text-[var(--paper)] md:px-16 md:py-24">
+        <div className="pointer-events-none absolute -right-10 -top-10 size-48 rounded-full bg-[var(--gold)]/15 blur-3xl" />
+        <p className="font-mono text-[11px] tracking-[0.28em] uppercase text-[var(--gold)]">
+          / Our vision
+        </p>
+        <p className="mt-6 max-w-3xl font-display text-3xl leading-[1.15] tracking-tight md:text-5xl md:leading-[1.1]">
+          To become a{" "}
+          <span className="font-display-italic text-[var(--gold)]">
+            trusted and recognised
+          </span>{" "}
+          construction partner in Singapore — known for reliability, quality, and{" "}
+          <span className="font-display-italic text-[var(--gold)]">
+            modern construction excellence.
+          </span>
+        </p>
+      </div>
+    </Reveal>
   );
 }
 

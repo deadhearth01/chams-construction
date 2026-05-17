@@ -429,6 +429,52 @@ export const sectorCards = [
   },
 ];
 
+export const chamsPhilosophy = [
+  {
+    letter: "C",
+    word: "Champion",
+    text: "We lead every project with dedication, responsibility, and a winning mindset.",
+  },
+  {
+    letter: "H",
+    word: "High-Quality",
+    text: "Consistent workmanship, attention to detail, and durability across every handover.",
+  },
+  {
+    letter: "A",
+    word: "Advanced",
+    text: "Modern methods, tools, and technical knowledge applied to improve efficiency and results.",
+  },
+  {
+    letter: "M",
+    word: "Modern",
+    text: "Contemporary construction practices and design solutions aligned to today's standards.",
+  },
+  {
+    letter: "S",
+    word: "Solutions",
+    text: "Complete, practical, cost-effective answers tailored to each client's requirements.",
+  },
+];
+
+export const aboutWhatWeDo = [
+  "Interior & Renovation Works — Residential & Commercial",
+  "Civil & Structural Construction Works",
+  "Blasting & Protective Painting Works",
+  "Electrical Installation & Maintenance",
+  "Plumbing & Sanitary Systems",
+  "Carpentry & Glass Works",
+  "Manpower Supply for Construction Projects",
+];
+
+export const aboutCommitment = [
+  "Strong workmanship",
+  "On-time completion",
+  "Safety-first execution",
+  "Transparent communication",
+  "Long-term client satisfaction",
+];
+
 export const aboutBullets = [
   "Singapore-based construction and engineering services company",
   "Comprehensive solutions in redecoration, waterproofing, electrical, and structural works",
