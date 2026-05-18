@@ -153,10 +153,14 @@ export function Header() {
             <nav className="hidden items-center gap-9 text-[13px] tracking-wide lg:flex">
               {navItems.map((item) =>
                 item.label === "Services" ? (
-                  <button
+                  <Link
                     key={item.label}
+                    href={item.href}
                     onMouseEnter={() => setServicesOpen(true)}
-                    onClick={() => setServicesOpen((v) => !v)}
+                    onFocus={() => setServicesOpen(true)}
+                    onClick={() => setServicesOpen(false)}
+                    aria-haspopup="true"
+                    aria-expanded={servicesOpen}
                     className="group relative flex items-center gap-1 py-2 text-[var(--ink)] hover:text-[var(--gold)]"
                   >
                     <span>Services</span>
@@ -165,7 +169,7 @@ export function Header() {
                       className={`transition-transform ${servicesOpen ? "rotate-180" : ""}`}
                     />
                     <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-[var(--ink)] transition-all duration-500 group-hover:w-full" />
-                  </button>
+                  </Link>
                 ) : (
                   <Link
                     key={item.label}
@@ -304,6 +308,74 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
 }
 
 // ─────────────────────────────────────────────────────────────
+// VerifiedBadges — shared row used in hero + footer
+// "hero": translucent chip strip over hero background
+// "footer": paper-bg block aligned with footer chrome
+// ─────────────────────────────────────────────────────────────
+export function VerifiedBadges({
+  variant = "footer",
+  className = "",
+}: {
+  variant?: "hero" | "footer";
+  className?: string;
+}) {
+  const isHero = variant === "hero";
+  return (
+    <div
+      className={`flex flex-wrap items-center gap-x-5 gap-y-3 ${className}`}
+    >
+      <span
+        className={`font-mono text-[10px] tracking-[0.28em] uppercase ${
+          isHero ? "text-[var(--navy)]/70" : "text-[var(--ash)]"
+        }`}
+      >
+        / Certified
+      </span>
+      <div
+        className={`flex items-center gap-3 rounded-full border px-3 py-2 backdrop-blur md:px-4 ${
+          isHero
+            ? "border-[var(--navy)]/20 bg-white/65"
+            : "border-[color:var(--line)] bg-[var(--paper)]"
+        }`}
+      >
+        <img
+          src="/verified-badges/BCA-certication.png"
+          alt="Building and Construction Authority — Registered Contractor"
+          width={1536}
+          height={1024}
+          loading="lazy"
+          decoding="async"
+          className="block h-7 w-auto md:h-8"
+        />
+        <span className="hidden text-[10px] leading-tight tracking-wide text-[var(--navy)]/70 sm:inline-block md:text-[11px]">
+          BCA<br />Registered
+        </span>
+      </div>
+      <div
+        className={`flex items-center gap-3 rounded-full border px-3 py-2 backdrop-blur md:px-4 ${
+          isHero
+            ? "border-[var(--navy)]/20 bg-white/65"
+            : "border-[color:var(--line)] bg-[var(--paper)]"
+        }`}
+      >
+        <img
+          src="/verified-badges/tve-certification.png"
+          alt="TVE-CERT ISO 45001:2018 — Occupational Health & Safety"
+          width={1536}
+          height={1024}
+          loading="lazy"
+          decoding="async"
+          className="block h-7 w-auto md:h-8"
+        />
+        <span className="hidden text-[10px] leading-tight tracking-wide text-[var(--navy)]/70 sm:inline-block md:text-[11px]">
+          ISO<br />45001:2018
+        </span>
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
 // Footer
 // ─────────────────────────────────────────────────────────────
 export function Footer() {
@@ -380,6 +452,17 @@ export function Footer() {
             </div>
           </Reveal>
         </div>
+
+        {/* Certifications strip */}
+        <Reveal delay={0.1}>
+          <div className="mt-14 flex flex-col items-start justify-between gap-5 border-t border-[color:var(--line)] pt-8 md:flex-row md:items-center">
+            <VerifiedBadges variant="footer" />
+            <p className="max-w-sm text-xs leading-5 text-[var(--ash)] md:text-right">
+              Registered with Singapore&apos;s Building &amp; Construction Authority.
+              Certified to ISO 45001:2018 for Occupational Health &amp; Safety.
+            </p>
+          </div>
+        </Reveal>
       </div>
 
       {/* City silhouette */}
@@ -645,6 +728,9 @@ export function HomeHero() {
                     <ArrowUpRight size={14} className="transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </Link>
                 </div>
+              </Reveal>
+              <Reveal delay={0.85}>
+                <VerifiedBadges variant="hero" className="mt-7 md:mt-8" />
               </Reveal>
             </div>
           </div>
