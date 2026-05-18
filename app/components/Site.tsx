@@ -2243,7 +2243,7 @@ export function ServicesIndexShowcase() {
   const flat = flatSubservices;
 
   const [active, setActive] = useState(0);
-  const pillsRef = useRef<HTMLDivElement>(null);
+  const rowRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -2252,17 +2252,23 @@ export function ServicesIndexShowcase() {
   });
   const progressWidth = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
+  // keep the active pill centered within its category row (mobile horizontal scroll)
   useEffect(() => {
-    if (!pillsRef.current) return;
-    const el = pillsRef.current.querySelector<HTMLAnchorElement>(
-      `[data-pill="${active}"]`,
-    );
-    el?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
-  }, [active]);
+    const activeEntry = flat[active];
+    if (!activeEntry) return;
+    const row = rowRefs.current[activeEntry.category.slug];
+    if (!row) return;
+    const el = row.querySelector<HTMLAnchorElement>(`[data-pill="${active}"]`);
+    el?.scrollIntoView({
+      behavior: "smooth",
+      inline: "center",
+      block: "nearest",
+    });
+  }, [active, flat]);
 
-  // detect category transitions in pill row
   return (
     <div ref={containerRef} className="relative">
+      {/* Sticky in-page navigator — two clearly grouped category rows */}
       <div className="sticky top-24 z-30 -mx-5 border-y border-[color:var(--line)] bg-[var(--paper)]/92 backdrop-blur md:-mx-10 md:top-28">
         <div className="h-[2px] w-full bg-transparent">
           <motion.div
@@ -2270,45 +2276,74 @@ export function ServicesIndexShowcase() {
             className="h-full origin-left bg-[var(--gold)]"
           />
         </div>
-        <div className="mx-auto flex max-w-[1400px] items-center gap-3 px-5 py-3 md:px-10 md:py-4">
-          <div
-            ref={pillsRef}
-            className="-mx-1 flex flex-1 items-center gap-2 overflow-x-auto scrollbar-none lg:justify-center [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-          >
-            {flat.map((entry, i) => {
-              const isActive = i === active;
-              const showDivider =
-                i > 0 && flat[i - 1].category.slug !== entry.category.slug;
-              return (
-                <div key={`${entry.category.slug}-${entry.sub.slug}`} className="flex items-center gap-2">
-                  {showDivider && (
-                    <span
-                      aria-hidden
-                      className="mx-1 h-5 w-px shrink-0 bg-[color:var(--line)]"
-                    />
-                  )}
-                  <a
-                    href={`#sub-${entry.category.slug}-${entry.sub.slug}`}
-                    data-pill={i}
-                    className={`group inline-flex shrink-0 items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors md:px-4 md:py-2 md:text-sm ${
-                      isActive
-                        ? "border-[var(--navy)] bg-[var(--navy)] text-[var(--paper)]"
-                        : "border-[color:var(--line)] bg-[var(--paper)] text-[var(--navy)] hover:border-[var(--navy)]"
+
+        <div className="mx-auto max-w-[1400px] divide-y divide-[color:var(--line-soft)] px-5 md:px-10">
+          {servicesTree.map((cat) => {
+            const indexedSubs = flat
+              .map((entry, i) => ({ entry, i }))
+              .filter(({ entry }) => entry.category.slug === cat.slug);
+            const activeInRow = indexedSubs.some(({ i }) => i === active);
+
+            return (
+              <div
+                key={cat.slug}
+                className="flex items-stretch gap-3 py-2.5 md:py-3"
+              >
+                {/* Category label — sticky on the left within the strip */}
+                <Link
+                  href={`/services/${cat.slug}`}
+                  className={`group sticky left-0 z-10 flex shrink-0 items-center gap-2 self-center rounded-full border px-3 py-1.5 font-mono text-[9px] tracking-[0.26em] uppercase transition md:gap-3 md:px-4 md:py-2 md:text-[10px] md:tracking-[0.3em] ${
+                    activeInRow
+                      ? "border-[var(--gold-deep)] bg-[var(--gold)]/10 text-[var(--gold-deep)]"
+                      : "border-[color:var(--line)] bg-[var(--paper)] text-[var(--ash)] hover:border-[var(--navy)] hover:text-[var(--navy)]"
+                  }`}
+                  aria-label={`Open ${cat.name} overview`}
+                >
+                  <span
+                    className={`h-1.5 w-1.5 rounded-full ${
+                      activeInRow ? "bg-[var(--gold-deep)]" : "bg-[var(--ash)]/60"
                     }`}
-                  >
-                    <span
-                      className={`font-mono text-[9px] tracking-[0.22em] md:text-[10px] md:tracking-[0.28em] ${
-                        isActive ? "text-[var(--gold)]" : "text-[var(--gold-deep)]"
-                      }`}
-                    >
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span className="tracking-tight">{entry.sub.name}</span>
-                  </a>
+                  />
+                  <span>{cat.name.split(" ")[0]}</span>
+                </Link>
+
+                {/* Horizontally scrollable pill row for this category */}
+                <div
+                  ref={(el) => {
+                    rowRefs.current[cat.slug] = el;
+                  }}
+                  className="-mx-1 flex flex-1 items-center gap-2 overflow-x-auto scrollbar-none lg:justify-start [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                >
+                  {indexedSubs.map(({ entry, i }) => {
+                    const isActive = i === active;
+                    return (
+                      <a
+                        key={`${entry.category.slug}-${entry.sub.slug}`}
+                        href={`#sub-${entry.category.slug}-${entry.sub.slug}`}
+                        data-pill={i}
+                        className={`group inline-flex shrink-0 items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors md:px-4 md:py-2 md:text-sm ${
+                          isActive
+                            ? "border-[var(--navy)] bg-[var(--navy)] text-[var(--paper)]"
+                            : "border-[color:var(--line)] bg-[var(--paper)] text-[var(--navy)] hover:border-[var(--navy)]"
+                        }`}
+                      >
+                        <span
+                          className={`font-mono text-[9px] tracking-[0.22em] md:text-[10px] md:tracking-[0.28em] ${
+                            isActive
+                              ? "text-[var(--gold)]"
+                              : "text-[var(--gold-deep)]"
+                          }`}
+                        >
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <span className="tracking-tight">{entry.sub.name}</span>
+                      </a>
+                    );
+                  })}
                 </div>
-              );
-            })}
-          </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
