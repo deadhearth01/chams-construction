@@ -338,6 +338,371 @@ export const serviceCategories: ServiceCategory[] = [
   },
 ];
 
+// ────────────────────────────────────────────────────────────────────
+// servicesTree — three-tier services catalogue used by /services routes
+// category → subservice → essentials. Each level carries copy + photo.
+// All image paths point at /public/services/<category>/<subservice>/…
+// ────────────────────────────────────────────────────────────────────
+export type ServiceEssential = {
+  slug: string;
+  name: string;
+  text: string;
+  image: string;
+};
+
+export type ServiceSubcategory = {
+  slug: string;
+  name: string;
+  tagline: string;
+  summary: string;
+  cover: string;
+  essentials: ServiceEssential[];
+};
+
+export type ServiceCategoryNode = {
+  slug: string;
+  name: string;
+  tagline: string;
+  summary: string;
+  cover: string;
+  subservices: ServiceSubcategory[];
+};
+
+export const servicesTree: ServiceCategoryNode[] = [
+  {
+    slug: "commercial",
+    name: "Commercial Services",
+    tagline: "Industrial-grade, site-led, supervised end-to-end",
+    summary:
+      "Heavy-duty commercial works delivered across Singapore worksites — blasting and protective coatings, electrical infrastructure, plumbing and sanitary, and the skilled crews to run it all.",
+    cover: "/services/commercial/blasting-painting/cover.png",
+    subservices: [
+      {
+        slug: "blasting-painting",
+        name: "Blasting & Painting",
+        tagline: "Protective coatings for steel, structures and floors",
+        summary:
+          "Abrasive blasting, industrial painting, waterproofing membranes, epoxy flooring and composite decking — the surface-finish package that keeps commercial structures protected for decades.",
+        cover: "/services/commercial/blasting-painting/cover.png",
+        essentials: [
+          {
+            slug: "blasting",
+            name: "Blasting",
+            text: "Abrasive blasting of steel and concrete to a clean profile, prepping surfaces for high-build protective coatings.",
+            image: "/services/commercial/blasting-painting/blasting.png",
+          },
+          {
+            slug: "painting-services",
+            name: "Painting Services",
+            text: "Industrial paint systems — primer, intermediate and topcoat — applied with airless spray and brush for hard-wearing finishes.",
+            image: "/services/commercial/blasting-painting/painting-services.png",
+          },
+          {
+            slug: "waterproofing",
+            name: "Waterproofing",
+            text: "Roof, basement, and wet-area membrane systems engineered for long-term water ingress protection.",
+            image: "/services/commercial/blasting-painting/waterproofing.png",
+          },
+          {
+            slug: "epoxy-flooring",
+            name: "Epoxy Flooring",
+            text: "Seamless self-levelling epoxy floors for warehouses, workshops and clean rooms — chemical-resistant and dust-free.",
+            image: "/services/commercial/blasting-painting/epoxy-flooring.png",
+          },
+          {
+            slug: "composite-decking",
+            name: "Composite Decking",
+            text: "Composite deck systems for plant rooms and access platforms — slip-resistant, low maintenance, fire-rated.",
+            image: "/services/commercial/blasting-painting/composite-decking.png",
+          },
+        ],
+      },
+      {
+        slug: "electrical",
+        name: "Electrical Services",
+        tagline: "Commercial power distribution & lighting",
+        summary:
+          "Site-grade electrical works — distribution boards, cable management, commercial lighting, and the preventive maintenance regimes that keep facilities running.",
+        cover: "/services/commercial/electrical/cover.png",
+        essentials: [
+          {
+            slug: "power-distribution",
+            name: "Power Distribution",
+            text: "Distribution boards, sub-mains and changeover panels installed and commissioned to commercial load requirements.",
+            image: "/services/commercial/electrical/power-distribution.png",
+          },
+          {
+            slug: "cable-management",
+            name: "Cable Management",
+            text: "Tray, trunking and conduit systems neatly routed and labelled — clean installations that pass inspection on the first walk.",
+            image: "/services/commercial/electrical/cable-management.png",
+          },
+          {
+            slug: "lighting-systems",
+            name: "Lighting Systems",
+            text: "Commercial LED lighting design and install — high-bay, linear and architectural lighting tuned to lux and CRI specs.",
+            image: "/services/commercial/electrical/lighting-systems.png",
+          },
+          {
+            slug: "preventive-maintenance",
+            name: "Preventive Maintenance",
+            text: "Scheduled inspection, thermographic testing and rectification programmes that catch faults before they cause downtime.",
+            image: "/services/commercial/electrical/preventive-maintenance.png",
+          },
+        ],
+      },
+      {
+        slug: "manpower-supply",
+        name: "Manpower Supply",
+        tagline: "Skilled crews and supervisors for active sites",
+        summary:
+          "Trade-tested manpower deployed across Singapore worksites — general workers, skilled tradesmen, supervisors, and temporary staffing for project peaks.",
+        cover: "/services/commercial/manpower-supply/cover.png",
+        essentials: [
+          {
+            slug: "general-workers",
+            name: "General Workers",
+            text: "Reliable general workforce for site clearance, material handling and site support tasks under direct supervision.",
+            image: "/services/commercial/manpower-supply/general-workers.png",
+          },
+          {
+            slug: "skilled-tradesmen",
+            name: "Skilled Tradesmen",
+            text: "Carpenters, electricians, plumbers and painters with the certifications and tools to start production on day one.",
+            image: "/services/commercial/manpower-supply/skilled-tradesmen.png",
+          },
+          {
+            slug: "site-supervisors",
+            name: "Site Supervisors",
+            text: "Singapore-trained supervisors who run crews, manage safety briefings and report progress to your project leads.",
+            image: "/services/commercial/manpower-supply/site-supervisors.png",
+          },
+          {
+            slug: "temporary-staffing",
+            name: "Temporary Staffing",
+            text: "Flexible manpower scale-up for peak periods, shutdown works and urgent rectification windows.",
+            image: "/services/commercial/manpower-supply/temporary-staffing.png",
+          },
+        ],
+      },
+      {
+        slug: "plumbing-sanitary",
+        name: "Plumbing & Sanitary",
+        tagline: "Water, drainage and sanitary infrastructure",
+        summary:
+          "Pipe installation, water supply systems, sanitary fittings, drainage and sewerage — full plumbing scope for commercial buildings and industrial facilities.",
+        cover: "/services/commercial/plumbing-sanitary/cover.png",
+        essentials: [
+          {
+            slug: "water-supply",
+            name: "Water Supply Systems",
+            text: "Cold and hot water reticulation, pressure boosters and PUB-compliant pipework laid out to building services drawings.",
+            image: "/services/commercial/plumbing-sanitary/water-supply.png",
+          },
+          {
+            slug: "drainage-sewerage",
+            name: "Drainage & Sewerage",
+            text: "Soil, waste and stormwater drainage built to falls — sewer connections, grease traps and inspection chambers.",
+            image: "/services/commercial/plumbing-sanitary/drainage-sewerage.png",
+          },
+          {
+            slug: "sanitary-fittings",
+            name: "Sanitary Fittings",
+            text: "Wash basins, water closets, urinals and accessories installed to spec for commercial washrooms and pantries.",
+            image: "/services/commercial/plumbing-sanitary/sanitary-fittings.png",
+          },
+          {
+            slug: "repairs-servicing",
+            name: "Repairs & Servicing",
+            text: "Leak rectification, pump servicing and pipework replacement under scheduled or call-out arrangements.",
+            image: "/services/commercial/plumbing-sanitary/repairs-servicing.png",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "interior",
+    name: "Interior Services",
+    tagline: "Detailed renovation works for offices, retail and homes",
+    summary:
+      "Interior fit-out and renovation — partitions, ceilings, joinery, flooring, plastering, painting, electrical and plumbing — delivered with the same site discipline as our commercial works.",
+    cover: "/services/interior/interior-works/cover.png",
+    subservices: [
+      {
+        slug: "interior-works",
+        name: "Interior Works",
+        tagline: "Fit-out scope — partitions, ceilings, flooring, joinery",
+        summary:
+          "Office, retail and residential renovation — false ceilings, wall partitions, flooring, and bespoke joinery built and installed by our in-house crews.",
+        cover: "/services/interior/interior-works/cover.png",
+        essentials: [
+          {
+            slug: "wall-partitions",
+            name: "Wall Partitions",
+            text: "Drywall, glass and demountable partition systems installed to acoustic and fire-rating requirements.",
+            image: "/services/interior/interior-works/wall-partitions.png",
+          },
+          {
+            slug: "false-ceilings",
+            name: "False Ceilings",
+            text: "Plasterboard, mineral fibre and bulkhead ceilings with integrated services openings for lighting and HVAC.",
+            image: "/services/interior/interior-works/false-ceilings.png",
+          },
+          {
+            slug: "flooring",
+            name: "Flooring",
+            text: "Vinyl, laminate, carpet tile and engineered timber floors laid over levelled, prepared substrates.",
+            image: "/services/interior/interior-works/flooring.png",
+          },
+          {
+            slug: "joinery-carpentry",
+            name: "Joinery & Carpentry",
+            text: "Custom cabinetry, counters, wardrobes and feature joinery fabricated to drawing and site-fitted.",
+            image: "/services/interior/interior-works/joinery-carpentry.png",
+          },
+        ],
+      },
+      {
+        slug: "cement-plastering",
+        name: "Cement Plastering",
+        tagline: "Wall and ceiling plastering, skim coats and patch repair",
+        summary:
+          "Plaster systems that build smooth, paint-ready walls and ceilings — full wall plastering, skim coats, ceiling work and rectification of damaged substrates.",
+        cover: "/services/interior/cement-plastering/cover.png",
+        essentials: [
+          {
+            slug: "wall-plastering",
+            name: "Wall Plastering",
+            text: "Cement-sand and gypsum plaster systems applied to brick and block walls in true line and plumb.",
+            image: "/services/interior/cement-plastering/wall-plastering.png",
+          },
+          {
+            slug: "ceiling-plastering",
+            name: "Ceiling Plastering",
+            text: "Ceiling plaster and finishing coats for soffits and bulkheads — flat, crack-resistant, paint-ready.",
+            image: "/services/interior/cement-plastering/ceiling-plastering.png",
+          },
+          {
+            slug: "skim-coating",
+            name: "Skim Coating",
+            text: "Fine skim layers over rough plaster or board joints, producing a Level-5 finish suitable for satin and gloss paints.",
+            image: "/services/interior/cement-plastering/skim-coating.png",
+          },
+          {
+            slug: "repair-patching",
+            name: "Repair & Patching",
+            text: "Targeted patching of cracks, hollows and damaged sections — colour and texture matched to existing substrate.",
+            image: "/services/interior/cement-plastering/repair-patching.png",
+          },
+        ],
+      },
+      {
+        slug: "painting",
+        name: "Painting",
+        tagline: "Interior and exterior paint systems",
+        summary:
+          "Surface preparation, primer, and finish coats for interior and exterior surfaces — including decorative finishes for feature walls and façades.",
+        cover: "/services/interior/painting/cover.png",
+        essentials: [
+          {
+            slug: "interior-painting",
+            name: "Interior Painting",
+            text: "Low-VOC interior paint systems for offices, retail and homes — even sheen, sharp cut lines, clean finish.",
+            image: "/services/interior/painting/interior-painting.png",
+          },
+          {
+            slug: "exterior-painting",
+            name: "Exterior Painting",
+            text: "Weather-resistant exterior coatings for façades, soffits and external walls — applied off scaffold or rope access.",
+            image: "/services/interior/painting/exterior-painting.png",
+          },
+          {
+            slug: "surface-preparation",
+            name: "Surface Preparation",
+            text: "Sanding, filling, masking and priming — the prep work that makes the finish coat last.",
+            image: "/services/interior/painting/surface-preparation.png",
+          },
+          {
+            slug: "decorative-finishes",
+            name: "Decorative Finishes",
+            text: "Textured paints, metallic finishes and feature-wall treatments to add character to interior spaces.",
+            image: "/services/interior/painting/decorative-finishes.png",
+          },
+        ],
+      },
+      {
+        slug: "electrical",
+        name: "Electrical Services",
+        tagline: "Lighting, power and fault rectification for interiors",
+        summary:
+          "Interior electrical scope — lighting installation, power points, wiring/rewiring and fault finding for offices, retail and homes.",
+        cover: "/services/interior/electrical/cover.png",
+        essentials: [
+          {
+            slug: "lighting-installation",
+            name: "Lighting Installation",
+            text: "Recessed downlights, tracks, pendants and architectural fixtures installed and aimed for designed lighting effect.",
+            image: "/services/interior/electrical/lighting-installation.png",
+          },
+          {
+            slug: "power-points",
+            name: "Power Points",
+            text: "13A sockets, data/USB outlets and dedicated circuits for appliances — neatly cut into walls and finishes.",
+            image: "/services/interior/electrical/power-points.png",
+          },
+          {
+            slug: "wiring-rewiring",
+            name: "Wiring & Rewiring",
+            text: "Full home and office rewiring works — distribution boards, cable runs, and labelled circuit lists for safe ownership.",
+            image: "/services/interior/electrical/wiring-rewiring.png",
+          },
+          {
+            slug: "fault-finding",
+            name: "Fault Finding",
+            text: "Diagnostic call-outs for tripping circuits, dim lights and dead outlets — fixed at root cause, not just reset.",
+            image: "/services/interior/electrical/fault-finding.png",
+          },
+        ],
+      },
+      {
+        slug: "plumbing-services",
+        name: "Plumbing Services",
+        tagline: "Interior plumbing — kitchen, bathroom and pipework",
+        summary:
+          "Kitchen and bathroom plumbing for homes and offices — pipe installation, leak repairs and full bathroom fit-out.",
+        cover: "/services/interior/plumbing-services/cover.png",
+        essentials: [
+          {
+            slug: "bathroom-fit-out",
+            name: "Bathroom Fit-Out",
+            text: "Wet-area plumbing for new and refurbished bathrooms — supply, drainage, sanitary fittings and tiling coordination.",
+            image: "/services/interior/plumbing-services/bathroom-fit-out.png",
+          },
+          {
+            slug: "kitchen-plumbing",
+            name: "Kitchen Plumbing",
+            text: "Sink, dishwasher, water-filter and gas-cooker plumbing routed cleanly behind cabinetry.",
+            image: "/services/interior/plumbing-services/kitchen-plumbing.png",
+          },
+          {
+            slug: "pipe-installation",
+            name: "Pipe Installation",
+            text: "Copper, PPR and PVC pipework runs concealed in walls and ceilings — pressure-tested before close-up.",
+            image: "/services/interior/plumbing-services/pipe-installation.png",
+          },
+          {
+            slug: "leak-repairs",
+            name: "Leak Repairs",
+            text: "Same-day leak rectification — pipe re-routing, joint replacement and reinstatement of finishes.",
+            image: "/services/interior/plumbing-services/leak-repairs.png",
+          },
+        ],
+      },
+    ],
+  },
+];
+
 export const featuredServices = [
   "Composite Decking",
   "Epoxy Flooring",
