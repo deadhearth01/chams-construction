@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowUpRight } from "lucide-react";
 import {
   ButtonLink,
   PageShell,
   Reveal,
+  ServicesCategoryShowcase,
 } from "../../components/Site";
 import { servicesTree } from "../../data";
 
@@ -88,72 +88,10 @@ export default async function CategoryPage({
         </div>
       </section>
 
-      {/* Sub-service cards */}
-      <section className="px-5 py-20 md:px-10 md:py-32">
+      {/* Inline sub-services with sticky pill nav + essentials */}
+      <section className="px-5 pb-12 md:px-10 md:pb-20">
         <div className="mx-auto max-w-[1400px]">
-          <Reveal>
-            <div className="flex flex-wrap items-end justify-between gap-6">
-              <div>
-                <p className="eyebrow">/ Sub-services</p>
-                <h2 className="mt-5 font-display text-[clamp(2rem,5vw,4rem)] leading-[1.04] tracking-tight">
-                  {category.subservices.length} disciplines,<br />
-                  <span className="font-display-italic text-[var(--gold-deep)]">
-                    one supervised team.
-                  </span>
-                </h2>
-              </div>
-              <p className="max-w-sm text-sm leading-6 text-[var(--ash)] md:text-base md:leading-7">
-                Each sub-service ships as a complete scope, run by the same site lead
-                end-to-end.
-              </p>
-            </div>
-          </Reveal>
-
-          <div className="mt-10 grid gap-8 sm:grid-cols-2 md:mt-14 lg:gap-10">
-            {category.subservices.map((sub, i) => (
-              <Reveal key={sub.slug} delay={i * 0.05}>
-                <Link
-                  href={`/services/${category.slug}/${sub.slug}`}
-                  className="group block overflow-hidden rounded-sm border border-[color:var(--line)] bg-[var(--paper)] transition-colors hover:border-[var(--navy)]"
-                >
-                  <div className="relative aspect-[3/2] overflow-hidden">
-                    <img
-                      src={sub.cover}
-                      alt={sub.name}
-                      width={1402}
-                      height={1122}
-                      loading="lazy"
-                      decoding="async"
-                      className="block h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
-                    />
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
-                    <span className="absolute left-4 top-4 font-mono text-[10px] tracking-[0.28em] uppercase text-white/85 md:text-[11px]">
-                      / {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span className="absolute bottom-4 right-4 grid size-10 place-items-center rounded-full border border-white/40 bg-white/10 backdrop-blur transition group-hover:bg-[var(--gold)] group-hover:text-[var(--navy)]">
-                      <ArrowUpRight size={16} />
-                    </span>
-                  </div>
-                  <div className="p-7 md:p-9">
-                    <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--gold-deep)]">
-                      {sub.tagline}
-                    </p>
-                    <h3 className="mt-3 font-display text-2xl leading-tight tracking-tight text-[var(--navy)] md:text-3xl">
-                      {sub.name}
-                    </h3>
-                    <p className="mt-4 text-sm leading-6 text-[var(--ash)] md:text-base md:leading-7">
-                      {sub.summary}
-                    </p>
-                    <ul className="mt-5 flex flex-wrap gap-x-4 gap-y-1.5 border-t border-[color:var(--line)] pt-4 font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--navy)]/70 md:text-[11px]">
-                      {sub.essentials.map((e) => (
-                        <li key={e.slug}>{e.name}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </Link>
-              </Reveal>
-            ))}
-          </div>
+          <ServicesCategoryShowcase category={category} />
         </div>
       </section>
 

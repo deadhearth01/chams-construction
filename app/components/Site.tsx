@@ -35,6 +35,7 @@ import {
   aboutCommitment,
   featuredProjects,
   type Service,
+  type ServiceCategoryNode,
 } from "../data";
 
 if (typeof window !== "undefined") {
@@ -331,20 +332,20 @@ export function VerifiedBadges({
         <img
           src="/verified-badges/BCA-certication.png"
           alt="Building and Construction Authority — Registered Contractor"
-          width={1536}
-          height={1024}
+          width={1920}
+          height={1920}
           loading="lazy"
           decoding="async"
-          className="block h-9 w-auto md:h-11"
+          className="block h-18 w-auto md:h-25"
         />
         <img
           src="/verified-badges/tve-certification.png"
           alt="TVE-CERT ISO 45001:2018 — Occupational Health & Safety"
-          width={1536}
-          height={1024}
+          width={1920}
+          height={1920}
           loading="lazy"
           decoding="async"
-          className="block h-9 w-auto md:h-11"
+          className="block h-18 w-auto md:h-25"
         />
       </div>
     );
@@ -1844,6 +1845,219 @@ export function OurWorkShowcase() {
           <ProjectCase
             key={p.client}
             project={p}
+            index={i}
+            onActive={setActive}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// ServicesCategoryShowcase — sticky pill nav + inline sub-service
+// sections, each with its essentials. Mirrors OurWorkShowcase pattern.
+// ─────────────────────────────────────────────────────────────
+
+function SubServiceSection({
+  sub,
+  index,
+  onActive,
+}: {
+  sub: ServiceCategoryNode["subservices"][number];
+  index: number;
+  onActive: (i: number) => void;
+}) {
+  const ref = useRef<HTMLElement>(null);
+  const inView = useInView(ref, { margin: "-40% 0px -40% 0px" });
+  useEffect(() => {
+    if (inView) onActive(index);
+  }, [inView, index, onActive]);
+
+  return (
+    <section
+      ref={ref}
+      id={`sub-${sub.slug}`}
+      className="relative scroll-mt-[140px] py-12 md:scroll-mt-32 md:py-20 lg:py-24"
+    >
+      {/* Sub-service hero block */}
+      <div className="grid items-center gap-8 md:gap-12 lg:grid-cols-[1fr_0.95fr] lg:gap-16">
+        <Reveal>
+          <div>
+            <div className="flex items-baseline gap-3 md:gap-4">
+              <span className="font-mono text-[10px] tracking-[0.26em] uppercase text-[var(--gold-deep)] md:text-[11px] md:tracking-[0.28em]">
+                / Sub-service {String(index + 1).padStart(2, "0")}
+              </span>
+              <span className="hidden h-px w-12 bg-[color:var(--line)] sm:block" />
+              <span className="font-mono text-[10px] tracking-[0.26em] uppercase text-[var(--ash)] md:text-[11px] md:tracking-[0.28em]">
+                {sub.essentials.length} essentials
+              </span>
+            </div>
+            <h2 className="mt-4 font-display text-[clamp(2rem,5.5vw,4rem)] leading-[1.04] tracking-tight text-[var(--navy)] md:mt-6">
+              {sub.name}
+            </h2>
+            <p className="mt-3 font-display-italic text-lg text-[var(--gold-deep)] md:text-xl">
+              {sub.tagline}
+            </p>
+            <p className="mt-5 max-w-xl text-base leading-7 text-[var(--ash)] md:text-lg md:leading-8">
+              {sub.summary}
+            </p>
+          </div>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <figure className="overflow-hidden rounded-sm border border-[color:var(--line)]">
+            <img
+              src={sub.cover}
+              alt={sub.name}
+              width={1402}
+              height={1122}
+              loading="lazy"
+              decoding="async"
+              className="block h-auto w-full"
+            />
+          </figure>
+        </Reveal>
+      </div>
+
+      {/* Essentials grid */}
+      <div className="mt-10 md:mt-14">
+        <Reveal>
+          <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--gold-deep)]">
+            / Essentials in this scope
+          </p>
+        </Reveal>
+        <motion.ul
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.05, delayChildren: 0.1 } },
+          }}
+          className="mt-6 grid gap-px overflow-hidden rounded-sm border border-[color:var(--line)] bg-[color:var(--line)] sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        >
+          {sub.essentials.map((e) => (
+            <motion.li
+              key={e.slug}
+              variants={{
+                hidden: { opacity: 0, y: 16 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+                },
+              }}
+              className="group flex flex-col bg-[var(--paper)]"
+            >
+              <div className="relative aspect-[3/2] overflow-hidden bg-[var(--cream)]">
+                <img
+                  src={e.image}
+                  alt={e.name}
+                  width={1402}
+                  height={1122}
+                  loading="lazy"
+                  decoding="async"
+                  className="block h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                />
+              </div>
+              <div className="flex flex-1 flex-col gap-3 p-5 md:p-6">
+                <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--gold-deep)]">
+                  · Essential
+                </p>
+                <h3 className="font-display text-lg leading-tight tracking-tight text-[var(--navy)] md:text-xl">
+                  {e.name}
+                </h3>
+                <p className="text-sm leading-6 text-[var(--ash)] md:text-[15px]">
+                  {e.text}
+                </p>
+              </div>
+            </motion.li>
+          ))}
+        </motion.ul>
+      </div>
+    </section>
+  );
+}
+
+export function ServicesCategoryShowcase({
+  category,
+}: {
+  category: ServiceCategoryNode;
+}) {
+  const [active, setActive] = useState(0);
+  const pillsRef = useRef<HTMLDivElement>(null);
+
+  // page-level progress for the top bar
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
+  const progressWidth = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+
+  // keep the active pill in view on mobile
+  useEffect(() => {
+    if (!pillsRef.current) return;
+    const el = pillsRef.current.querySelector<HTMLAnchorElement>(
+      `[data-pill="${active}"]`,
+    );
+    el?.scrollIntoView({
+      behavior: "smooth",
+      inline: "center",
+      block: "nearest",
+    });
+  }, [active]);
+
+  return (
+    <div ref={containerRef} className="relative">
+      {/* Sticky in-page navigator — under the main header */}
+      <div className="sticky top-24 z-30 -mx-5 border-y border-[color:var(--line)] bg-[var(--paper)]/92 backdrop-blur md:-mx-10 md:top-28">
+        <div className="h-[2px] w-full bg-transparent">
+          <motion.div
+            style={{ width: progressWidth }}
+            className="h-full origin-left bg-[var(--gold)]"
+          />
+        </div>
+
+        <div className="mx-auto flex max-w-[1400px] items-center gap-3 px-5 py-3 md:px-10 md:py-4">
+          <div
+            ref={pillsRef}
+            className="-mx-1 flex flex-1 items-center gap-2 overflow-x-auto scrollbar-none lg:justify-center [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          >
+            {category.subservices.map((s, i) => {
+              const isActive = i === active;
+              return (
+                <a
+                  key={s.slug}
+                  href={`#sub-${s.slug}`}
+                  data-pill={i}
+                  className={`group inline-flex shrink-0 items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors md:px-4 md:py-2 md:text-sm ${
+                    isActive
+                      ? "border-[var(--navy)] bg-[var(--navy)] text-[var(--paper)]"
+                      : "border-[color:var(--line)] bg-[var(--paper)] text-[var(--navy)] hover:border-[var(--navy)]"
+                  }`}
+                >
+                  <span
+                    className={`font-mono text-[9px] tracking-[0.22em] md:text-[10px] md:tracking-[0.28em] ${
+                      isActive ? "text-[var(--gold)]" : "text-[var(--gold-deep)]"
+                    }`}
+                  >
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="tracking-tight">{s.name}</span>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* Sub-service sections */}
+      <div>
+        {category.subservices.map((s, i) => (
+          <SubServiceSection
+            key={s.slug}
+            sub={s}
             index={i}
             onActive={setActive}
           />
