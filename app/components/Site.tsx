@@ -1153,26 +1153,93 @@ export function AboutCommitment() {
 }
 
 // ─────────────────────────────────────────────────────────────
-// AboutVision — pulled quote on warm bg
+// TeamOnSitePhoto — wide editorial photo break, intrinsic ratio
+// Uses plain <img> so PNG ships untouched (no Next/Image re-encode)
+// ─────────────────────────────────────────────────────────────
+export function TeamOnSitePhoto() {
+  return (
+    <Reveal>
+      <figure className="overflow-hidden rounded-sm border border-[color:var(--line)] bg-[var(--paper)]">
+        <div className="flex flex-col gap-6 px-6 pt-6 md:flex-row md:items-end md:justify-between md:px-10 md:pt-10">
+          <div>
+            <p className="eyebrow">/ On the ground</p>
+            <h3 className="mt-4 font-display text-3xl leading-[1.06] tracking-tight md:text-5xl md:leading-[1.04]">
+              One team,<br />
+              <span className="font-display-italic text-[var(--gold-deep)]">
+                one standard.
+              </span>
+            </h3>
+          </div>
+          <p className="max-w-sm text-sm leading-6 text-[var(--ash)] md:text-base md:leading-7">
+            Engineers, project leads and tradesmen working as a single unit — from
+            first survey to final handover.
+          </p>
+        </div>
+        <div className="mt-8 md:mt-10">
+          {/* intrinsic aspect 1586:992 preserved — width auto, no crop, no Next/Image re-encode */}
+          <img
+            src="/about-team-onsite.png"
+            alt="CHAMS site team on a Singapore construction site at sunset"
+            width={1586}
+            height={992}
+            loading="lazy"
+            decoding="async"
+            className="block h-auto w-full"
+          />
+        </div>
+      </figure>
+    </Reveal>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// AboutVision — pulled quote on navy with anchored team photo
 // ─────────────────────────────────────────────────────────────
 export function AboutVision() {
   return (
     <Reveal>
-      <div className="relative overflow-hidden rounded-sm bg-[var(--navy)] px-6 py-16 text-[var(--paper)] md:px-16 md:py-24">
+      <div className="relative overflow-hidden rounded-sm bg-[var(--navy)] text-[var(--paper)]">
         <div className="pointer-events-none absolute -right-10 -top-10 size-48 rounded-full bg-[var(--gold)]/15 blur-3xl" />
-        <p className="font-mono text-[11px] tracking-[0.28em] uppercase text-[var(--gold)]">
-          / Our vision
-        </p>
-        <p className="mt-6 max-w-3xl font-display text-3xl leading-[1.15] tracking-tight md:text-5xl md:leading-[1.1]">
-          To become a{" "}
-          <span className="font-display-italic text-[var(--gold)]">
-            trusted and recognised
-          </span>{" "}
-          construction partner in Singapore — known for reliability, quality, and{" "}
-          <span className="font-display-italic text-[var(--gold)]">
-            modern construction excellence.
-          </span>
-        </p>
+        <div className="grid gap-0 lg:grid-cols-[1fr_1.05fr] lg:items-stretch">
+          {/* Quote */}
+          <div className="relative px-6 py-14 md:px-12 md:py-20 lg:px-16 lg:py-24">
+            <p className="font-mono text-[11px] tracking-[0.28em] uppercase text-[var(--gold)]">
+              / Our vision
+            </p>
+            <p className="mt-6 max-w-xl font-display text-3xl leading-[1.15] tracking-tight md:text-5xl md:leading-[1.1]">
+              To become a{" "}
+              <span className="font-display-italic text-[var(--gold)]">
+                trusted and recognised
+              </span>{" "}
+              construction partner in Singapore — known for reliability, quality, and{" "}
+              <span className="font-display-italic text-[var(--gold)]">
+                modern construction excellence.
+              </span>
+            </p>
+
+            <div className="mt-10 flex items-center gap-6">
+              <span className="h-px w-12 bg-[var(--gold)]" />
+              <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--paper)]/60">
+                Built in Singapore
+              </span>
+            </div>
+          </div>
+
+          {/* Team photo — intrinsic 1672:941, raw PNG, no Next/Image re-encode */}
+          <div className="relative aspect-[1672/941] w-full lg:aspect-auto lg:self-stretch">
+            <img
+              src="/about-team-large.png"
+              alt="CHAMS construction team gathered on-site"
+              width={1672}
+              height={941}
+              loading="lazy"
+              decoding="async"
+              className="absolute inset-0 block h-full w-full object-cover object-center"
+            />
+            <span className="pointer-events-none absolute bottom-4 right-4 hidden h-px w-16 bg-[var(--gold)] lg:block" />
+            <span className="pointer-events-none absolute bottom-4 right-4 hidden h-16 w-px bg-[var(--gold)] lg:block" />
+          </div>
+        </div>
       </div>
     </Reveal>
   );

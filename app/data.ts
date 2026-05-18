@@ -473,6 +473,7 @@ export const aboutCommitment = [
   "Safety-first execution",
   "Transparent communication",
   "Long-term client satisfaction",
+  "Disciplined on-site supervision",
 ];
 
 export const aboutBullets = [
