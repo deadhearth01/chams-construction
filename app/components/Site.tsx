@@ -1153,46 +1153,6 @@ export function AboutCommitment() {
 }
 
 // ─────────────────────────────────────────────────────────────
-// TeamOnSitePhoto — wide editorial photo break, intrinsic ratio
-// Uses plain <img> so PNG ships untouched (no Next/Image re-encode)
-// ─────────────────────────────────────────────────────────────
-export function TeamOnSitePhoto() {
-  return (
-    <Reveal>
-      <figure className="overflow-hidden rounded-sm border border-[color:var(--line)] bg-[var(--paper)]">
-        <div className="flex flex-col gap-6 px-6 pt-6 md:flex-row md:items-end md:justify-between md:px-10 md:pt-10">
-          <div>
-            <p className="eyebrow">/ On the ground</p>
-            <h3 className="mt-4 font-display text-3xl leading-[1.06] tracking-tight md:text-5xl md:leading-[1.04]">
-              One team,<br />
-              <span className="font-display-italic text-[var(--gold-deep)]">
-                one standard.
-              </span>
-            </h3>
-          </div>
-          <p className="max-w-sm text-sm leading-6 text-[var(--ash)] md:text-base md:leading-7">
-            Engineers, project leads and tradesmen working as a single unit — from
-            first survey to final handover.
-          </p>
-        </div>
-        <div className="mt-8 md:mt-10">
-          {/* intrinsic aspect 1586:992 preserved — width auto, no crop, no Next/Image re-encode */}
-          <img
-            src="/about-team-onsite.png"
-            alt="CHAMS site team on a Singapore construction site at sunset"
-            width={1586}
-            height={992}
-            loading="lazy"
-            decoding="async"
-            className="block h-auto w-full"
-          />
-        </div>
-      </figure>
-    </Reveal>
-  );
-}
-
-// ─────────────────────────────────────────────────────────────
 // AboutVision — pulled quote on navy with anchored team photo
 // ─────────────────────────────────────────────────────────────
 export function AboutVision() {

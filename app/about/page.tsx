@@ -10,7 +10,6 @@ import {
   PageShell,
   Reveal,
   StatBlock,
-  TeamOnSitePhoto,
 } from "../components/Site";
 
 export default function AboutPage() {
@@ -53,13 +52,6 @@ export default function AboutPage() {
       <section className="px-5 py-16 md:px-10 md:py-32">
         <div className="mx-auto max-w-[1400px]">
           <AboutCommitment />
-        </div>
-      </section>
-
-      {/* Team photo break (Contact2.png — natural aspect, raw PNG) */}
-      <section className="px-5 pb-12 md:px-10 md:pb-20">
-        <div className="mx-auto max-w-[1400px]">
-          <TeamOnSitePhoto />
         </div>
       </section>
 
