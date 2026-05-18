@@ -1510,15 +1510,15 @@ function ProjectCase({
   const ref = useRef<HTMLElement>(null);
   const reverse = index % 2 === 1;
 
-  // parallax for the photo
+  // parallax for the photo (desktop only — disabled on touch for perf)
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
   });
-  const photoY = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
+  const photoY = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"]);
 
-  // notify rail of active section
-  const inView = useInView(ref, { margin: "-45% 0px -45% 0px" });
+  // notify rail of active section — wider tolerance on mobile (shorter sections)
+  const inView = useInView(ref, { margin: "-40% 0px -40% 0px" });
   useEffect(() => {
     if (inView) onActive(index);
   }, [inView, index, onActive]);
@@ -1527,23 +1527,23 @@ function ProjectCase({
     <section
       ref={ref}
       id={`case-${project.client.toLowerCase()}`}
-      className="relative scroll-mt-24 py-16 md:py-28"
+      className="relative scroll-mt-[140px] py-10 md:scroll-mt-32 md:py-20 lg:py-28"
     >
       <div
-        className={`grid items-center gap-10 md:gap-16 lg:grid-cols-2 lg:gap-20 ${
+        className={`grid items-center gap-6 sm:gap-8 md:gap-12 lg:grid-cols-2 lg:gap-20 ${
           reverse ? "lg:[&>*:first-child]:order-2" : ""
         }`}
       >
         {/* Image column */}
         <motion.div
-          initial={{ opacity: 0, y: 60 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
           className="relative"
         >
           <div className="relative aspect-[3/2] overflow-hidden rounded-sm border border-[color:var(--line)] bg-[var(--cream)]">
-            <motion.div style={{ y: photoY }} className="absolute inset-0 -my-[8%]">
+            <motion.div style={{ y: photoY }} className="absolute inset-0 -my-[6%]">
               <img
                 src={project.image}
                 alt={project.imageAlt}
@@ -1554,17 +1554,14 @@ function ProjectCase({
                 className="block h-full w-full object-cover object-center"
               />
             </motion.div>
-            {/* subtle vignette */}
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/10" />
-            {/* corner index */}
-            <div className="absolute left-4 top-4 font-mono text-[10px] tracking-[0.3em] uppercase text-white/85">
+            <div className="absolute left-3 top-3 font-mono text-[9px] tracking-[0.28em] uppercase text-white/85 md:left-4 md:top-4 md:text-[10px]">
               / Case {project.index}
             </div>
-            <div className="absolute bottom-4 right-4 font-mono text-[10px] tracking-[0.3em] uppercase text-white/85">
+            <div className="absolute bottom-3 right-3 font-mono text-[9px] tracking-[0.28em] uppercase text-white/85 md:bottom-4 md:right-4 md:text-[10px]">
               {project.sector}
             </div>
           </div>
-          {/* gold frame accent */}
           <span
             className={`pointer-events-none absolute -z-[1] hidden h-32 w-32 bg-[var(--gold)]/35 blur-2xl lg:block ${
               reverse ? "-right-6 -top-6" : "-left-6 -bottom-6"
@@ -1574,25 +1571,25 @@ function ProjectCase({
 
         {/* Content column */}
         <div className="relative">
-          <Reveal>
-            <div className="flex items-baseline gap-4">
-              <span className="font-mono text-[11px] tracking-[0.28em] uppercase text-[var(--gold-deep)]">
+          <Reveal y={20}>
+            <div className="flex flex-wrap items-baseline gap-3 md:gap-4">
+              <span className="font-mono text-[10px] tracking-[0.26em] uppercase text-[var(--gold-deep)] md:text-[11px] md:tracking-[0.28em]">
                 / Client {project.index}
               </span>
-              <span className="h-px w-12 bg-[color:var(--line)]" />
-              <span className="font-mono text-[11px] tracking-[0.28em] uppercase text-[var(--ash)]">
+              <span className="hidden h-px w-12 bg-[color:var(--line)] sm:block" />
+              <span className="font-mono text-[10px] tracking-[0.26em] uppercase text-[var(--ash)] md:text-[11px] md:tracking-[0.28em]">
                 {project.sector}
               </span>
             </div>
 
-            <p className="mt-5 font-display text-2xl uppercase tracking-[0.04em] text-[var(--navy)] md:text-3xl">
+            <p className="mt-4 font-display text-xl uppercase tracking-[0.04em] text-[var(--navy)] md:mt-5 md:text-3xl">
               {project.client}
             </p>
             <p className="mt-1 font-display-italic text-sm text-[var(--ash)] md:text-base">
               {project.tagline}
             </p>
 
-            <h2 className="mt-6 font-display text-[clamp(2rem,5vw,4rem)] leading-[1.04] tracking-tight text-[var(--navy)]">
+            <h2 className="mt-4 font-display text-[clamp(1.75rem,7vw,4rem)] leading-[1.04] tracking-tight text-[var(--navy)] md:mt-6">
               {project.title}
               <br />
               <span className="font-display-italic text-[var(--gold-deep)]">
@@ -1600,7 +1597,7 @@ function ProjectCase({
               </span>
             </h2>
 
-            <p className="mt-6 max-w-xl text-base leading-7 text-[var(--ash)] md:text-lg md:leading-8">
+            <p className="mt-5 max-w-xl text-sm leading-6 text-[var(--ash)] md:mt-6 md:text-lg md:leading-8">
               {project.summary}
             </p>
           </Reveal>
@@ -1609,28 +1606,28 @@ function ProjectCase({
           <motion.ul
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
+            viewport={{ once: true, amount: 0.2 }}
             variants={{
               hidden: {},
-              visible: { transition: { staggerChildren: 0.08, delayChildren: 0.2 } },
+              visible: { transition: { staggerChildren: 0.06, delayChildren: 0.15 } },
             }}
-            className="mt-8 grid gap-px overflow-hidden rounded-sm border border-[color:var(--line)] bg-[color:var(--line)] sm:grid-cols-2"
+            className="mt-6 grid gap-px overflow-hidden rounded-sm border border-[color:var(--line)] bg-[color:var(--line)] sm:grid-cols-2 md:mt-8"
           >
             {project.scope.map((item) => (
               <motion.li
                 key={item}
                 variants={{
-                  hidden: { opacity: 0, x: -16 },
+                  hidden: { opacity: 0, x: -12 },
                   visible: {
                     opacity: 1,
                     x: 0,
-                    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+                    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
                   },
                 }}
-                className="flex items-start gap-3 bg-[var(--paper)] p-5"
+                className="flex items-start gap-3 bg-[var(--paper)] p-4 md:p-5"
               >
-                <span className="mt-1 inline-block size-1.5 shrink-0 rounded-full bg-[var(--gold-deep)]" />
-                <span className="text-sm leading-6 text-[var(--navy)] md:text-base">
+                <span className="mt-1.5 inline-block size-1.5 shrink-0 rounded-full bg-[var(--gold-deep)]" />
+                <span className="text-[13px] leading-5 text-[var(--navy)] md:text-base md:leading-6">
                   {item}
                 </span>
               </motion.li>
@@ -1638,29 +1635,29 @@ function ProjectCase({
           </motion.ul>
 
           {/* Meta row */}
-          <Reveal delay={0.1}>
-            <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-[color:var(--line)] pt-5">
+          <Reveal delay={0.1} y={20}>
+            <div className="mt-6 grid grid-cols-3 gap-4 border-t border-[color:var(--line)] pt-5 md:mt-8 md:flex md:flex-wrap md:items-center md:gap-x-8 md:gap-y-3">
               <div>
-                <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--ash)]">
+                <p className="font-mono text-[9px] tracking-[0.26em] uppercase text-[var(--ash)] md:text-[10px] md:tracking-[0.28em]">
                   Location
                 </p>
-                <p className="mt-1 text-sm text-[var(--navy)] md:text-base">
+                <p className="mt-1 text-[13px] leading-snug text-[var(--navy)] md:text-base">
                   {project.location}
                 </p>
               </div>
               <div>
-                <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--ash)]">
+                <p className="font-mono text-[9px] tracking-[0.26em] uppercase text-[var(--ash)] md:text-[10px] md:tracking-[0.28em]">
                   Status
                 </p>
-                <p className="mt-1 text-sm text-[var(--navy)] md:text-base">
+                <p className="mt-1 text-[13px] leading-snug text-[var(--navy)] md:text-base">
                   {project.year}
                 </p>
               </div>
               <div>
-                <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--ash)]">
+                <p className="font-mono text-[9px] tracking-[0.26em] uppercase text-[var(--ash)] md:text-[10px] md:tracking-[0.28em]">
                   Sector
                 </p>
-                <p className="mt-1 text-sm text-[var(--navy)] md:text-base">
+                <p className="mt-1 text-[13px] leading-snug text-[var(--navy)] md:text-base">
                   {project.sector}
                 </p>
               </div>
@@ -1675,6 +1672,7 @@ function ProjectCase({
 export function OurWorkShowcase() {
   const [active, setActive] = useState(0);
   const total = featuredProjects.length;
+  const pillsRef = useRef<HTMLDivElement>(null);
 
   // page-level progress for the top bar
   const containerRef = useRef<HTMLDivElement>(null);
@@ -1684,14 +1682,72 @@ export function OurWorkShowcase() {
   });
   const progressWidth = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
+  // keep the active pill in view on mobile
+  useEffect(() => {
+    if (!pillsRef.current) return;
+    const el = pillsRef.current.querySelector<HTMLAnchorElement>(
+      `[data-pill="${active}"]`
+    );
+    el?.scrollIntoView({
+      behavior: "smooth",
+      inline: "center",
+      block: "nearest",
+    });
+  }, [active]);
+
   return (
     <div ref={containerRef} className="relative">
-      {/* Top progress bar */}
-      <div className="sticky top-0 z-20 h-[2px] w-full bg-transparent">
-        <motion.div
-          style={{ width: progressWidth }}
-          className="h-full origin-left bg-[var(--gold)]"
-        />
+      {/* Sticky in-page navigator (sits under main header) */}
+      <div className="sticky top-24 z-30 -mx-5 border-y border-[color:var(--line)] bg-[var(--paper)]/92 backdrop-blur md:-mx-10 md:top-28">
+        {/* Top gold progress strip */}
+        <div className="h-[2px] w-full bg-transparent">
+          <motion.div
+            style={{ width: progressWidth }}
+            className="h-full origin-left bg-[var(--gold)]"
+          />
+        </div>
+
+        <div className="mx-auto flex max-w-[1400px] items-center gap-4 px-5 py-3 md:px-10 md:py-4">
+          <span className="hidden font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--ash)] md:inline">
+            / Jump to
+          </span>
+          <div
+            ref={pillsRef}
+            className="-mx-1 flex flex-1 items-center gap-2 overflow-x-auto scrollbar-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          >
+            {featuredProjects.map((p, i) => {
+              const isActive = i === active;
+              return (
+                <a
+                  key={p.client}
+                  href={`#case-${p.client.toLowerCase()}`}
+                  data-pill={i}
+                  className={`group inline-flex shrink-0 items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors md:px-4 md:py-2 md:text-sm ${
+                    isActive
+                      ? "border-[var(--navy)] bg-[var(--navy)] text-[var(--paper)]"
+                      : "border-[color:var(--line)] bg-[var(--paper)] text-[var(--navy)] hover:border-[var(--navy)]"
+                  }`}
+                >
+                  <span
+                    className={`font-mono text-[9px] tracking-[0.22em] md:text-[10px] md:tracking-[0.28em] ${
+                      isActive ? "text-[var(--gold)]" : "text-[var(--gold-deep)]"
+                    }`}
+                  >
+                    {p.index}
+                  </span>
+                  <span className="tracking-tight">{p.client}</span>
+                </a>
+              );
+            })}
+          </div>
+          <span className="hidden font-mono text-[11px] tracking-widest text-[var(--ash)] md:inline">
+            <span className="text-[var(--gold-deep)]">
+              {String(active + 1).padStart(2, "0")}
+            </span>
+            <span className="mx-1">/</span>
+            {String(total).padStart(2, "0")}
+          </span>
+        </div>
       </div>
 
       <div className="grid gap-0 lg:grid-cols-[1fr_220px]">
@@ -1709,7 +1765,7 @@ export function OurWorkShowcase() {
 
         {/* Sticky client rail (desktop only) */}
         <aside className="hidden lg:block">
-          <div className="sticky top-32 ml-10 border-l border-[color:var(--line)] pl-6">
+          <div className="sticky top-44 ml-10 border-l border-[color:var(--line)] pl-6">
             <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--ash)]">
               / Clients
             </p>
