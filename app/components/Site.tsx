@@ -320,24 +320,43 @@ export function VerifiedBadges({
   className?: string;
 }) {
   const isHero = variant === "hero";
+
+  // Hero: logos only, no capsule chrome
+  if (isHero) {
+    return (
+      <div className={`flex flex-wrap items-center gap-x-5 gap-y-3 ${className}`}>
+        <span className="font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--navy)]/70">
+          / Certified
+        </span>
+        <img
+          src="/verified-badges/BCA-certication.png"
+          alt="Building and Construction Authority — Registered Contractor"
+          width={1536}
+          height={1024}
+          loading="lazy"
+          decoding="async"
+          className="block h-9 w-auto md:h-11"
+        />
+        <img
+          src="/verified-badges/tve-certification.png"
+          alt="TVE-CERT ISO 45001:2018 — Occupational Health & Safety"
+          width={1536}
+          height={1024}
+          loading="lazy"
+          decoding="async"
+          className="block h-9 w-auto md:h-11"
+        />
+      </div>
+    );
+  }
+
+  // Footer: chipped layout, paper bg
   return (
-    <div
-      className={`flex flex-wrap items-center gap-x-5 gap-y-3 ${className}`}
-    >
-      <span
-        className={`font-mono text-[10px] tracking-[0.28em] uppercase ${
-          isHero ? "text-[var(--navy)]/70" : "text-[var(--ash)]"
-        }`}
-      >
+    <div className={`flex flex-wrap items-center gap-x-5 gap-y-3 ${className}`}>
+      <span className="font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--ash)]">
         / Certified
       </span>
-      <div
-        className={`flex items-center gap-3 rounded-full border px-3 py-2 backdrop-blur md:px-4 ${
-          isHero
-            ? "border-[var(--navy)]/20 bg-white/65"
-            : "border-[color:var(--line)] bg-[var(--paper)]"
-        }`}
-      >
+      <div className="flex items-center gap-3 rounded-full border border-[color:var(--line)] bg-[var(--paper)] px-3 py-2 md:px-4">
         <img
           src="/verified-badges/BCA-certication.png"
           alt="Building and Construction Authority — Registered Contractor"
@@ -351,13 +370,7 @@ export function VerifiedBadges({
           BCA<br />Registered
         </span>
       </div>
-      <div
-        className={`flex items-center gap-3 rounded-full border px-3 py-2 backdrop-blur md:px-4 ${
-          isHero
-            ? "border-[var(--navy)]/20 bg-white/65"
-            : "border-[color:var(--line)] bg-[var(--paper)]"
-        }`}
-      >
+      <div className="flex items-center gap-3 rounded-full border border-[color:var(--line)] bg-[var(--paper)] px-3 py-2 md:px-4">
         <img
           src="/verified-badges/tve-certification.png"
           alt="TVE-CERT ISO 45001:2018 — Occupational Health & Safety"
