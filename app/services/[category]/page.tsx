@@ -22,9 +22,23 @@ export async function generateMetadata({
   const { category: slug } = await params;
   const cat = servicesTree.find((c) => c.slug === slug);
   if (!cat) return {};
+  const path = `/services/${cat.slug}`;
   return {
-    title: `${cat.name} · CHAMS Construction`,
+    title: cat.name,
     description: cat.summary,
+    alternates: { canonical: path },
+    openGraph: {
+      url: path,
+      title: `${cat.name} · CHAMS Construction Singapore`,
+      description: cat.summary,
+      images: [{ url: cat.cover, width: 1536, height: 1024, alt: cat.name }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${cat.name} · CHAMS Construction Singapore`,
+      description: cat.summary,
+      images: [cat.cover],
+    },
   };
 }
 
@@ -37,8 +51,58 @@ export default async function CategoryPage({
   const category = servicesTree.find((c) => c.slug === slug);
   if (!category) notFound();
 
+  const SITE = "https://chamsconstruction.com";
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: SITE },
+      { "@type": "ListItem", position: 2, name: "Services", item: `${SITE}/services` },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: category.name,
+        item: `${SITE}/services/${category.slug}`,
+      },
+    ],
+  };
+  const serviceLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: category.name,
+    description: category.summary,
+    provider: { "@id": `${SITE}/#organization` },
+    areaServed: { "@type": "Country", name: "Singapore" },
+    serviceType: category.name,
+    url: `${SITE}/services/${category.slug}`,
+    image: `${SITE}${category.cover}`,
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: category.name,
+      itemListElement: category.subservices.map((s) => ({
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: s.name,
+          description: s.summary,
+          url: `${SITE}/services/${category.slug}/${s.slug}`,
+        },
+      })),
+    },
+  };
+
   return (
     <PageShell>
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+      />
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceLd) }}
+      />
       {/* Hero */}
       <section className="relative px-5 pt-28 md:px-10 md:pt-36">
         <div className="mx-auto max-w-[1400px]">

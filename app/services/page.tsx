@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import {
@@ -7,6 +8,14 @@ import {
   Reveal,
 } from "../components/Site";
 import { servicesTree } from "../data";
+
+export const metadata: Metadata = {
+  title: "Services — Commercial & Interior Construction Singapore",
+  description:
+    "CHAMS Construction services: commercial blasting, painting, electrical, plumbing, manpower supply; interior fit-out, plastering, electrical, painting and plumbing — all delivered with site discipline across Singapore.",
+  alternates: { canonical: "/services" },
+  openGraph: { url: "/services", title: "Services — CHAMS Construction" },
+};
 
 export default function ServicesPage() {
   return (

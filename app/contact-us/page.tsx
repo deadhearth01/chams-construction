@@ -234,38 +234,7 @@ export default function ContactPage() {
               </div>
 
               {/* Hours / response notes */}
-              <motion.ul
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.25 }}
-                variants={{
-                  hidden: {},
-                  visible: { transition: { staggerChildren: 0.06, delayChildren: 0.1 } },
-                }}
-                className="mt-8 grid gap-px overflow-hidden rounded-sm border border-[color:var(--line)] bg-[color:var(--line)] sm:grid-cols-2"
-              >
-                {channelNotes.map(([label, value]) => (
-                  <motion.li
-                    key={label}
-                    variants={{
-                      hidden: { opacity: 0, x: -10 },
-                      visible: {
-                        opacity: 1,
-                        x: 0,
-                        transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
-                      },
-                    }}
-                    className="bg-[var(--paper)] p-5"
-                  >
-                    <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--gold-deep)]">
-                      {label}
-                    </p>
-                    <p className="mt-2 text-sm leading-6 text-[var(--navy)] md:text-base">
-                      {value}
-                    </p>
-                  </motion.li>
-                ))}
-              </motion.ul>
+     
             </div>
           </div>
         </div>

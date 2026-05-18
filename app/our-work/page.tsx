@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import {
   ButtonLink,
   OurWorkShowcase,
@@ -5,6 +6,14 @@ import {
   PageShell,
   Reveal,
 } from "../components/Site";
+
+export const metadata: Metadata = {
+  title: "Our Work — JTC · LTA · HDB · PUB · Micron Projects in Singapore",
+  description:
+    "Selected CHAMS Construction case studies — JTC industrial infrastructure, LTA roads and bridges, HDB estate works, PUB water and drainage, and Micron semiconductor fab maintenance across Singapore.",
+  alternates: { canonical: "/our-work" },
+  openGraph: { url: "/our-work", title: "Our Work — CHAMS Construction" },
+};
 
 export default function OurWorkPage() {
   return (

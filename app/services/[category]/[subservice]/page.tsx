@@ -25,9 +25,23 @@ export async function generateMetadata({
   const cat = servicesTree.find((c) => c.slug === catSlug);
   const sub = cat?.subservices.find((s) => s.slug === subSlug);
   if (!sub || !cat) return {};
+  const path = `/services/${cat.slug}/${sub.slug}`;
   return {
-    title: `${sub.name} — ${cat.name} · CHAMS Construction`,
+    title: `${sub.name} — ${cat.name}`,
     description: sub.summary,
+    alternates: { canonical: path },
+    openGraph: {
+      url: path,
+      title: `${sub.name} — ${cat.name} · CHAMS Construction Singapore`,
+      description: sub.summary,
+      images: [{ url: sub.cover, width: 1536, height: 1024, alt: sub.name }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${sub.name} — ${cat.name} · CHAMS Construction Singapore`,
+      description: sub.summary,
+      images: [sub.cover],
+    },
   };
 }
 
@@ -43,8 +57,64 @@ export default async function SubServicePage({
 
   const otherSubs = category.subservices.filter((s) => s.slug !== sub.slug);
 
+  const SITE = "https://chamsconstruction.com";
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: SITE },
+      { "@type": "ListItem", position: 2, name: "Services", item: `${SITE}/services` },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: category.name,
+        item: `${SITE}/services/${category.slug}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 4,
+        name: sub.name,
+        item: `${SITE}/services/${category.slug}/${sub.slug}`,
+      },
+    ],
+  };
+  const serviceLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: sub.name,
+    description: sub.summary,
+    provider: { "@id": `${SITE}/#organization` },
+    areaServed: { "@type": "Country", name: "Singapore" },
+    serviceType: sub.name,
+    category: category.name,
+    url: `${SITE}/services/${category.slug}/${sub.slug}`,
+    image: `${SITE}${sub.cover}`,
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: `${sub.name} essentials`,
+      itemListElement: sub.essentials.map((e) => ({
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: e.name,
+          description: e.text,
+        },
+      })),
+    },
+  };
+
   return (
     <PageShell>
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+      />
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceLd) }}
+      />
       {/* Hero */}
       <section className="relative px-5 pt-28 md:px-10 md:pt-36">
         <div className="mx-auto max-w-[1400px]">
