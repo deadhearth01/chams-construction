@@ -356,6 +356,7 @@ export const featuredServices = [
 export const featuredProjects: {
   index: string;
   client: string;
+  fullName: string;
   tagline: string;
   title: string;
   italic: string;
@@ -370,6 +371,7 @@ export const featuredProjects: {
   {
     index: "01",
     client: "JTC",
+    fullName: "JTC (Jurong Town Corporation)",
     tagline: "Building tomorrow's industries",
     title: "Jurong Island",
     italic: "industrial infrastructure.",
@@ -390,6 +392,7 @@ export const featuredProjects: {
   {
     index: "02",
     client: "LTA",
+    fullName: "LTA (Land Transport Authority)",
     tagline: "Building Singapore's transport future",
     title: "Roads, bridges &",
     italic: "MRT infrastructure.",
@@ -410,6 +413,7 @@ export const featuredProjects: {
   {
     index: "03",
     client: "HDB",
+    fullName: "HDB (Housing & Development Board)",
     tagline: "Building better homes, together",
     title: "Estate upgrading &",
     italic: "drainage works.",
@@ -430,6 +434,7 @@ export const featuredProjects: {
   {
     index: "04",
     client: "PUB",
+    fullName: "PUB (Public Utilities Board)",
     tagline: "Singapore's national water agency",
     title: "Water & drainage",
     italic: "infrastructure.",
@@ -450,6 +455,7 @@ export const featuredProjects: {
   {
     index: "05",
     client: "Micron",
+    fullName: "Micron Semiconductors",
     tagline: "Reliable commercial maintenance",
     title: "Semiconductor fab",
     italic: "maintenance works.",

@@ -1582,8 +1582,8 @@ function ProjectCase({
               </span>
             </div>
 
-            <p className="mt-4 font-display text-xl uppercase tracking-[0.04em] text-[var(--navy)] md:mt-5 md:text-3xl">
-              {project.client}
+            <p className="mt-4 font-display text-lg tracking-tight text-[var(--navy)] md:mt-5 md:text-2xl">
+              {project.fullName}
             </p>
             <p className="mt-1 font-display-italic text-sm text-[var(--ash)] md:text-base">
               {project.tagline}
@@ -1671,7 +1671,6 @@ function ProjectCase({
 
 export function OurWorkShowcase() {
   const [active, setActive] = useState(0);
-  const total = featuredProjects.length;
   const pillsRef = useRef<HTMLDivElement>(null);
 
   // page-level progress for the top bar
@@ -1707,13 +1706,10 @@ export function OurWorkShowcase() {
           />
         </div>
 
-        <div className="mx-auto flex max-w-[1400px] items-center gap-4 px-5 py-3 md:px-10 md:py-4">
-          <span className="hidden font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--ash)] md:inline">
-            / Jump to
-          </span>
+        <div className="mx-auto flex max-w-[1400px] items-center gap-3 px-5 py-3 md:px-10 md:py-4">
           <div
             ref={pillsRef}
-            className="-mx-1 flex flex-1 items-center gap-2 overflow-x-auto scrollbar-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="-mx-1 flex flex-1 items-center gap-2 overflow-x-auto scrollbar-none lg:justify-center [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {featuredProjects.map((p, i) => {
               const isActive = i === active;
@@ -1740,83 +1736,19 @@ export function OurWorkShowcase() {
               );
             })}
           </div>
-          <span className="hidden font-mono text-[11px] tracking-widest text-[var(--ash)] md:inline">
-            <span className="text-[var(--gold-deep)]">
-              {String(active + 1).padStart(2, "0")}
-            </span>
-            <span className="mx-1">/</span>
-            {String(total).padStart(2, "0")}
-          </span>
         </div>
       </div>
 
-      <div className="grid gap-0 lg:grid-cols-[1fr_220px]">
-        {/* Case studies stream */}
-        <div className="min-w-0">
-          {featuredProjects.map((p, i) => (
-            <ProjectCase
-              key={p.client}
-              project={p}
-              index={i}
-              onActive={setActive}
-            />
-          ))}
-        </div>
-
-        {/* Sticky client rail (desktop only) */}
-        <aside className="hidden lg:block">
-          <div className="sticky top-44 ml-10 border-l border-[color:var(--line)] pl-6">
-            <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--ash)]">
-              / Clients
-            </p>
-            <ul className="mt-6 space-y-5">
-              {featuredProjects.map((p, i) => {
-                const isActive = i === active;
-                return (
-                  <li key={p.client}>
-                    <a
-                      href={`#case-${p.client.toLowerCase()}`}
-                      className="group flex items-center gap-3"
-                    >
-                      <span
-                        className={`font-mono text-[10px] tracking-[0.28em] transition-colors ${
-                          isActive ? "text-[var(--gold-deep)]" : "text-[var(--ash)]"
-                        }`}
-                      >
-                        {p.index}
-                      </span>
-                      <motion.span
-                        animate={{ width: isActive ? 28 : 12 }}
-                        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                        className={`h-px ${
-                          isActive ? "bg-[var(--gold)]" : "bg-[color:var(--line)]"
-                        }`}
-                      />
-                      <span
-                        className={`font-display text-base tracking-tight transition-colors ${
-                          isActive
-                            ? "text-[var(--navy)]"
-                            : "text-[var(--ash)] group-hover:text-[var(--navy)]"
-                        }`}
-                      >
-                        {p.client}
-                      </span>
-                    </a>
-                  </li>
-                );
-              })}
-            </ul>
-
-            <div className="mt-10 flex items-center gap-3">
-              <span className="font-mono text-[11px] tracking-widest text-[var(--gold-deep)]">
-                {String(active + 1).padStart(2, "0")}
-              </span>
-              <span className="font-mono text-[10px] tracking-widest text-[var(--ash)]">
-                / {String(total).padStart(2, "0")}
-              </span>
-            </div>
-          </div>
-        </aside>
+      {/* Case studies stream */}
+      <div>
+        {featuredProjects.map((p, i) => (
+          <ProjectCase
+            key={p.client}
+            project={p}
+            index={i}
+            onActive={setActive}
+          />
+        ))}
       </div>
     </div>
   );
