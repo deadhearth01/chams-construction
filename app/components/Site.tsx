@@ -33,6 +33,7 @@ import {
   chamsPhilosophy,
   aboutWhatWeDo,
   aboutCommitment,
+  featuredProjects,
   type Service,
 } from "../data";
 
@@ -1488,6 +1489,279 @@ function ServiceRow({ service, index, categoryKey }: { service: Service; index: 
           ))}
         </div>
       </motion.div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// OurWorkShowcase — immersive scroll case-study sections with
+// sticky client-rail, parallax photos, animated scope reveal
+// ─────────────────────────────────────────────────────────────
+
+function ProjectCase({
+  project,
+  index,
+  onActive,
+}: {
+  project: (typeof featuredProjects)[number];
+  index: number;
+  onActive: (i: number) => void;
+}) {
+  const ref = useRef<HTMLElement>(null);
+  const reverse = index % 2 === 1;
+
+  // parallax for the photo
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+  const photoY = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
+
+  // notify rail of active section
+  const inView = useInView(ref, { margin: "-45% 0px -45% 0px" });
+  useEffect(() => {
+    if (inView) onActive(index);
+  }, [inView, index, onActive]);
+
+  return (
+    <section
+      ref={ref}
+      id={`case-${project.client.toLowerCase()}`}
+      className="relative scroll-mt-24 py-16 md:py-28"
+    >
+      <div
+        className={`grid items-center gap-10 md:gap-16 lg:grid-cols-2 lg:gap-20 ${
+          reverse ? "lg:[&>*:first-child]:order-2" : ""
+        }`}
+      >
+        {/* Image column */}
+        <motion.div
+          initial={{ opacity: 0, y: 60 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          className="relative"
+        >
+          <div className="relative aspect-[3/2] overflow-hidden rounded-sm border border-[color:var(--line)] bg-[var(--cream)]">
+            <motion.div style={{ y: photoY }} className="absolute inset-0 -my-[8%]">
+              <img
+                src={project.image}
+                alt={project.imageAlt}
+                width={1536}
+                height={1024}
+                loading="lazy"
+                decoding="async"
+                className="block h-full w-full object-cover object-center"
+              />
+            </motion.div>
+            {/* subtle vignette */}
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/10" />
+            {/* corner index */}
+            <div className="absolute left-4 top-4 font-mono text-[10px] tracking-[0.3em] uppercase text-white/85">
+              / Case {project.index}
+            </div>
+            <div className="absolute bottom-4 right-4 font-mono text-[10px] tracking-[0.3em] uppercase text-white/85">
+              {project.sector}
+            </div>
+          </div>
+          {/* gold frame accent */}
+          <span
+            className={`pointer-events-none absolute -z-[1] hidden h-32 w-32 bg-[var(--gold)]/35 blur-2xl lg:block ${
+              reverse ? "-right-6 -top-6" : "-left-6 -bottom-6"
+            }`}
+          />
+        </motion.div>
+
+        {/* Content column */}
+        <div className="relative">
+          <Reveal>
+            <div className="flex items-baseline gap-4">
+              <span className="font-mono text-[11px] tracking-[0.28em] uppercase text-[var(--gold-deep)]">
+                / Client {project.index}
+              </span>
+              <span className="h-px w-12 bg-[color:var(--line)]" />
+              <span className="font-mono text-[11px] tracking-[0.28em] uppercase text-[var(--ash)]">
+                {project.sector}
+              </span>
+            </div>
+
+            <p className="mt-5 font-display text-2xl uppercase tracking-[0.04em] text-[var(--navy)] md:text-3xl">
+              {project.client}
+            </p>
+            <p className="mt-1 font-display-italic text-sm text-[var(--ash)] md:text-base">
+              {project.tagline}
+            </p>
+
+            <h2 className="mt-6 font-display text-[clamp(2rem,5vw,4rem)] leading-[1.04] tracking-tight text-[var(--navy)]">
+              {project.title}
+              <br />
+              <span className="font-display-italic text-[var(--gold-deep)]">
+                {project.italic}
+              </span>
+            </h2>
+
+            <p className="mt-6 max-w-xl text-base leading-7 text-[var(--ash)] md:text-lg md:leading-8">
+              {project.summary}
+            </p>
+          </Reveal>
+
+          {/* Scope bullets — stagger reveal */}
+          <motion.ul
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={{
+              hidden: {},
+              visible: { transition: { staggerChildren: 0.08, delayChildren: 0.2 } },
+            }}
+            className="mt-8 grid gap-px overflow-hidden rounded-sm border border-[color:var(--line)] bg-[color:var(--line)] sm:grid-cols-2"
+          >
+            {project.scope.map((item) => (
+              <motion.li
+                key={item}
+                variants={{
+                  hidden: { opacity: 0, x: -16 },
+                  visible: {
+                    opacity: 1,
+                    x: 0,
+                    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+                  },
+                }}
+                className="flex items-start gap-3 bg-[var(--paper)] p-5"
+              >
+                <span className="mt-1 inline-block size-1.5 shrink-0 rounded-full bg-[var(--gold-deep)]" />
+                <span className="text-sm leading-6 text-[var(--navy)] md:text-base">
+                  {item}
+                </span>
+              </motion.li>
+            ))}
+          </motion.ul>
+
+          {/* Meta row */}
+          <Reveal delay={0.1}>
+            <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-[color:var(--line)] pt-5">
+              <div>
+                <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--ash)]">
+                  Location
+                </p>
+                <p className="mt-1 text-sm text-[var(--navy)] md:text-base">
+                  {project.location}
+                </p>
+              </div>
+              <div>
+                <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--ash)]">
+                  Status
+                </p>
+                <p className="mt-1 text-sm text-[var(--navy)] md:text-base">
+                  {project.year}
+                </p>
+              </div>
+              <div>
+                <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--ash)]">
+                  Sector
+                </p>
+                <p className="mt-1 text-sm text-[var(--navy)] md:text-base">
+                  {project.sector}
+                </p>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function OurWorkShowcase() {
+  const [active, setActive] = useState(0);
+  const total = featuredProjects.length;
+
+  // page-level progress for the top bar
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
+  const progressWidth = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+
+  return (
+    <div ref={containerRef} className="relative">
+      {/* Top progress bar */}
+      <div className="sticky top-0 z-20 h-[2px] w-full bg-transparent">
+        <motion.div
+          style={{ width: progressWidth }}
+          className="h-full origin-left bg-[var(--gold)]"
+        />
+      </div>
+
+      <div className="grid gap-0 lg:grid-cols-[1fr_220px]">
+        {/* Case studies stream */}
+        <div className="min-w-0">
+          {featuredProjects.map((p, i) => (
+            <ProjectCase
+              key={p.client}
+              project={p}
+              index={i}
+              onActive={setActive}
+            />
+          ))}
+        </div>
+
+        {/* Sticky client rail (desktop only) */}
+        <aside className="hidden lg:block">
+          <div className="sticky top-32 ml-10 border-l border-[color:var(--line)] pl-6">
+            <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--ash)]">
+              / Clients
+            </p>
+            <ul className="mt-6 space-y-5">
+              {featuredProjects.map((p, i) => {
+                const isActive = i === active;
+                return (
+                  <li key={p.client}>
+                    <a
+                      href={`#case-${p.client.toLowerCase()}`}
+                      className="group flex items-center gap-3"
+                    >
+                      <span
+                        className={`font-mono text-[10px] tracking-[0.28em] transition-colors ${
+                          isActive ? "text-[var(--gold-deep)]" : "text-[var(--ash)]"
+                        }`}
+                      >
+                        {p.index}
+                      </span>
+                      <motion.span
+                        animate={{ width: isActive ? 28 : 12 }}
+                        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                        className={`h-px ${
+                          isActive ? "bg-[var(--gold)]" : "bg-[color:var(--line)]"
+                        }`}
+                      />
+                      <span
+                        className={`font-display text-base tracking-tight transition-colors ${
+                          isActive
+                            ? "text-[var(--navy)]"
+                            : "text-[var(--ash)] group-hover:text-[var(--navy)]"
+                        }`}
+                      >
+                        {p.client}
+                      </span>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+
+            <div className="mt-10 flex items-center gap-3">
+              <span className="font-mono text-[11px] tracking-widest text-[var(--gold-deep)]">
+                {String(active + 1).padStart(2, "0")}
+              </span>
+              <span className="font-mono text-[10px] tracking-widest text-[var(--ash)]">
+                / {String(total).padStart(2, "0")}
+              </span>
+            </div>
+          </div>
+        </aside>
+      </div>
     </div>
   );
 }

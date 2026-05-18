@@ -1,9 +1,9 @@
 import {
   ButtonLink,
+  OurWorkShowcase,
   PageHero,
   PageShell,
   Reveal,
-  WorkGrid,
 } from "../components/Site";
 
 export default function OurWorkPage() {
@@ -11,17 +11,44 @@ export default function OurWorkPage() {
     <PageShell>
       <PageHero
         eyebrow="/ Selected work"
-        title="Recent projects,"
-        italic="across sectors."
-        text="Industrial coating, interior fit-out, plumbing, plastering, electrical works, and manpower deployment — a sampling of what Chams Construction has delivered across Singapore worksites."
+        title="Built for Singapore's"
+        italic="statutory boards & industries."
+        text="Five live case studies — JTC, LTA, HDB, PUB and Micron — civil, infrastructure and commercial M&E works delivered by CHAMS Construction across the island."
       />
 
-      <section className="px-5 pb-24 md:px-10 md:pb-32">
+      {/* Immersive scroll showcase — sticky client rail + parallax case studies */}
+      <section className="px-5 pb-16 md:px-10 md:pb-24">
         <div className="mx-auto max-w-[1400px]">
-          <WorkGrid />
+          <OurWorkShowcase />
         </div>
       </section>
 
+      {/* Capability bar */}
+      <section className="px-5 pb-24 md:px-10 md:pb-32">
+        <div className="mx-auto max-w-[1400px]">
+          <Reveal>
+            <div className="grid gap-px overflow-hidden rounded-sm border border-[color:var(--line)] bg-[color:var(--line)] sm:grid-cols-2 lg:grid-cols-4">
+              {[
+                ["Civil & Infrastructure", "Roadworks, drainage, reinforcement, structural access"],
+                ["Industrial Estates", "JTC zones, Jurong Island, petrochemical-adjacent works"],
+                ["Water & Utilities", "Pipelines, sewerage, drainage, flood mitigation"],
+                ["Commercial M&E", "HVAC, electrical, lighting, building maintenance"],
+              ].map(([title, text]) => (
+                <div key={title} className="bg-[var(--paper)] p-7 md:p-9">
+                  <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--gold-deep)]">
+                    {title}
+                  </p>
+                  <p className="mt-4 text-sm leading-6 text-[var(--ash)] md:text-base md:leading-7">
+                    {text}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* CTA */}
       <section className="px-5 pb-24 md:px-10 md:pb-32">
         <div className="mx-auto max-w-[1400px]">
           <Reveal>

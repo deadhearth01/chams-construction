@@ -351,6 +351,124 @@ export const featuredServices = [
   "Manpower Supply",
 ];
 
+// Featured client projects (real Singapore statutory boards + Micron)
+// Used by /our-work page for the immersive scroll showcase.
+export const featuredProjects: {
+  index: string;
+  client: string;
+  tagline: string;
+  title: string;
+  italic: string;
+  location: string;
+  year: string;
+  sector: string;
+  scope: string[];
+  summary: string;
+  image: string;
+  imageAlt: string;
+}[] = [
+  {
+    index: "01",
+    client: "JTC",
+    tagline: "Building tomorrow's industries",
+    title: "Jurong Island",
+    italic: "industrial infrastructure.",
+    location: "Jurong Island, Singapore",
+    year: "Ongoing",
+    sector: "Industrial / Civil",
+    scope: [
+      "Flyover connectivity & structural access works",
+      "Integrated infrastructure across key JTC zones",
+      "Reinforcement & foundation works at active plants",
+      "On-site engineering support for industrial expansion",
+    ],
+    summary:
+      "Continuous support for JTC's industrial estates — reinforcement, structural access and integrated civil works delivered alongside live petrochemical and semiconductor neighbours.",
+    image: "/our-work/jtcWorks.png",
+    imageAlt: "CHAMS crew laying reinforcement at a JTC Jurong Island industrial site at sunset",
+  },
+  {
+    index: "02",
+    client: "LTA",
+    tagline: "Building Singapore's transport future",
+    title: "Roads, bridges &",
+    italic: "MRT infrastructure.",
+    location: "Island-wide, Singapore",
+    year: "Ongoing",
+    sector: "Civil / Transport",
+    scope: [
+      "Roadworks and carriageway upgrading",
+      "Bridge and viaduct structural works",
+      "Supporting MRT line infrastructure builds",
+      "Island-wide maintenance and rectification",
+    ],
+    summary:
+      "Civil execution for Land Transport Authority programmes — viaduct reinforcement, road upgrading and MRT support works under live-traffic conditions, finished to LTA's safety and tolerance standards.",
+    image: "/our-work/LTAworks.png",
+    imageAlt: "CHAMS site supervisor overseeing LTA viaduct reinforcement at sunset",
+  },
+  {
+    index: "03",
+    client: "HDB",
+    tagline: "Building better homes, together",
+    title: "Estate upgrading &",
+    italic: "drainage works.",
+    location: "Yishun Ave 9 & Singapore estates",
+    year: "Ongoing",
+    sector: "Public Housing / Civil",
+    scope: [
+      "Drainage and trench reinforcement",
+      "Footpath and access carriageway works",
+      "Estate-side service ducts and pits",
+      "Resident-friendly site control and hoarding",
+    ],
+    summary:
+      "Estate-side civil works for HDB precincts — drainage upgrading, trench reinforcement and service-duct installation delivered with resident-first site control on live housing roads.",
+    image: "/our-work/HDBworks.png",
+    imageAlt: "CHAMS crew reinforcing a roadside drainage trench beside an HDB estate at Yishun Ave 9",
+  },
+  {
+    index: "04",
+    client: "PUB",
+    tagline: "Singapore's national water agency",
+    title: "Water & drainage",
+    italic: "infrastructure.",
+    location: "Marina Bay & Singapore-wide",
+    year: "Ongoing",
+    sector: "Water / Utilities",
+    scope: [
+      "Water pipeline installation & network upgrading",
+      "Sewerage system & pumping station works",
+      "Drainage improvement and flood mitigation",
+      "Reservoir, tank & water treatment infrastructure",
+    ],
+    summary:
+      "Heavy-civil water works for PUB — pipeline, sewerage, drainage and flood mitigation projects executed across waterfront and inland sites, including marquee Marina Bay infrastructure.",
+    image: "/our-work/PUBworks.png",
+    imageAlt: "CHAMS excavator and crew on a PUB water-infrastructure site facing Marina Bay Sands",
+  },
+  {
+    index: "05",
+    client: "Micron",
+    tagline: "Reliable commercial maintenance",
+    title: "Semiconductor fab",
+    italic: "maintenance works.",
+    location: "Micron Singapore fab",
+    year: "Ongoing",
+    sector: "Commercial / M&E",
+    scope: [
+      "Mechanical & electrical maintenance works",
+      "Air-conditioning servicing & rectification",
+      "Lighting system inspection & maintenance",
+      "General building maintenance & rectification",
+    ],
+    summary:
+      "Ongoing commercial M&E maintenance at Micron's Singapore semiconductor fab — mechanical, electrical, HVAC and lighting works delivered on tightly controlled mission-critical schedules.",
+    image: "/our-work/micronWorks.png",
+    imageAlt: "CHAMS maintenance team approaching the Micron Semiconductors fab in Singapore",
+  },
+];
+
 export const workItems = [
   {
     title: "Industrial Epoxy Flooring",
