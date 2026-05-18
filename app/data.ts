@@ -697,6 +697,142 @@ export const servicesTree: ServiceCategoryNode[] = [
             text: "Same-day leak rectification — pipe re-routing, joint replacement and reinstatement of finishes.",
             image: "/services/interior/plumbing-services/leak-repairs.png",
           },
+          {
+            slug: "waterproofing-surface-protection",
+            name: "Waterproofing & Surface Protection",
+            text: "Membrane waterproofing and surface protection for wet areas — bathrooms, kitchens, balconies and planter boxes — sealed before tile and finish work.",
+            image: "/services/commercial/blasting-painting/waterproofing.png",
+          },
+        ],
+      },
+      {
+        slug: "carpentry-works",
+        name: "Carpentry Works",
+        tagline: "Custom furniture, cabinets, doors and partitions",
+        summary:
+          "Bespoke carpentry for homes, offices and retail — custom furniture, fitted cabinets, hinged and sliding doors, and timber-framed partitions, designed to drawing and fabricated in-house.",
+        cover: "/services/interior/interior-works/joinery-carpentry.png",
+        essentials: [
+          {
+            slug: "custom-furniture",
+            name: "Custom Furniture",
+            text: "Tables, benches, shelving and feature pieces built to spec — material, joinery and finish matched to the interior.",
+            image: "/services/interior/interior-works/joinery-carpentry.png",
+          },
+          {
+            slug: "cabinets",
+            name: "Cabinets",
+            text: "Fitted kitchen, wardrobe and storage cabinets — frame, doors, hardware and finish installed plumb and aligned.",
+            image: "/services/interior/interior-works/joinery-carpentry.png",
+          },
+          {
+            slug: "doors",
+            name: "Doors",
+            text: "Hinged, sliding and pocket doors fabricated and hung — frames trued, ironmongery fitted, finish coordinated with adjoining works.",
+            image: "/services/interior/interior-works/joinery-carpentry.png",
+          },
+          {
+            slug: "partitions",
+            name: "Partitions",
+            text: "Timber-framed partitions for studies, dressing rooms and meeting rooms — boxed, clad and finished to drawing.",
+            image: "/services/interior/interior-works/wall-partitions.png",
+          },
+        ],
+      },
+      {
+        slug: "glass-aluminium",
+        name: "Glass & Aluminium Works",
+        tagline: "Partitions, doors and façades in glass and aluminium",
+        summary:
+          "Glazed partitions, aluminium-framed doors and façade systems for offices, retail and residential interiors — measured, fabricated and installed with finished joinery tolerances.",
+        cover: "/services/interior/interior-works/wall-partitions.png",
+        essentials: [
+          {
+            slug: "partitions",
+            name: "Partitions",
+            text: "Framed and frameless glass partitions with aluminium profiles — clear, frosted or laminated panels installed to acoustic and fire-rating specs.",
+            image: "/services/interior/interior-works/wall-partitions.png",
+          },
+          {
+            slug: "doors",
+            name: "Doors",
+            text: "Aluminium-framed glass doors — hinged, sliding and pivot — with closers, locks and accessories matched to the partition system.",
+            image: "/services/interior/interior-works/wall-partitions.png",
+          },
+          {
+            slug: "facades",
+            name: "Façades",
+            text: "Aluminium curtain-wall and storefront systems — glazing units, gaskets and weatherproofing installed for clean, weathertight façades.",
+            image: "/services/interior/interior-works/cover.png",
+          },
+        ],
+      },
+      {
+        slug: "flooring-installation",
+        name: "Flooring Installation",
+        tagline: "Tiles, vinyl, marble and timber flooring",
+        summary:
+          "Flooring scope for offices, retail and homes — tile, vinyl, marble and timber floors laid over levelled, prepared substrates with clean perimeter trims.",
+        cover: "/services/interior/interior-works/flooring.png",
+        essentials: [
+          {
+            slug: "tiles",
+            name: "Tiles",
+            text: "Ceramic, porcelain and stone tile flooring — set on adhesive or screed, grouted and sealed with clean cuts at perimeters and services.",
+            image: "/services/interior/interior-works/flooring.png",
+          },
+          {
+            slug: "vinyl",
+            name: "Vinyl",
+            text: "Sheet and LVT vinyl flooring — laid over prepared substrate with welded or click joints for high-traffic commercial floors.",
+            image: "/services/interior/interior-works/flooring.png",
+          },
+          {
+            slug: "marble",
+            name: "Marble",
+            text: "Marble and natural-stone slabs installed and polished — set on screed beds with mitred edges and skirting matched to the floor.",
+            image: "/services/interior/interior-works/flooring.png",
+          },
+          {
+            slug: "timber",
+            name: "Timber",
+            text: "Engineered and solid timber floors — laid on battens, screed or moisture barrier with expansion gaps and skirting trims.",
+            image: "/services/interior/interior-works/flooring.png",
+          },
+        ],
+      },
+      {
+        slug: "demolition-reinstatement",
+        name: "Demolition & Reinstatement Works",
+        tagline: "Soft strip, structural demolition and full reinstatement",
+        summary:
+          "Internal demolition for offices, retail and homes — from soft strip-out of finishes to structural removal — followed by reinstatement of walls, finishes and services so the space is ready for the next fit-out.",
+        cover: "/services/interior/cement-plastering/repair-patching.png",
+        essentials: [
+          {
+            slug: "soft-demolition",
+            name: "Soft Demolition",
+            text: "Strip-out of finishes, partitions, ceilings, joinery and floor coverings — non-structural removal with services isolation.",
+            image: "/services/interior/cement-plastering/repair-patching.png",
+          },
+          {
+            slug: "structural-demolition",
+            name: "Structural Demolition",
+            text: "Controlled removal of structural walls, slabs and openings — engineered, propped and executed under supervision.",
+            image: "/services/interior/cement-plastering/repair-patching.png",
+          },
+          {
+            slug: "debris-removal",
+            name: "Debris Removal & Disposal",
+            text: "Bagging, hauling and disposal of demolition waste — site cleared, sorted and removed within agreed access windows.",
+            image: "/services/interior/cement-plastering/repair-patching.png",
+          },
+          {
+            slug: "reinstatement",
+            name: "Reinstatement Works",
+            text: "Reinstatement of walls, floors, ceilings and services to a clean handover state — ready for the next fit-out or lease handback.",
+            image: "/services/interior/cement-plastering/wall-plastering.png",
+          },
         ],
       },
     ],
