@@ -34,6 +34,7 @@ import {
   aboutWhatWeDo,
   aboutCommitment,
   featuredProjects,
+  servicesTree,
   type Service,
   type ServiceCategoryNode,
 } from "../data";
@@ -227,19 +228,27 @@ export function Header() {
                   View all services <ArrowUpRight size={14} />
                 </Link>
               </div>
-              {serviceCategories.map((cat) => (
-                <div key={cat.key}>
-                  <p className="eyebrow">{cat.label}</p>
-                  <h3 className="mt-3 font-display text-2xl leading-tight">{cat.title}</h3>
+              {servicesTree.map((cat) => (
+                <div key={cat.slug}>
+                  <p className="eyebrow">/ {cat.name}</p>
+                  <h3 className="mt-3 font-display text-2xl leading-tight">
+                    <Link
+                      href={`/services/${cat.slug}`}
+                      onClick={() => setServicesOpen(false)}
+                      className="hover:text-[var(--gold-deep)]"
+                    >
+                      {cat.name}
+                    </Link>
+                  </h3>
                   <ul className="mt-5 space-y-2">
-                    {cat.services.map((s) => (
-                      <li key={s.title}>
+                    {cat.subservices.map((s) => (
+                      <li key={s.slug}>
                         <Link
-                          href={`/services#${cat.key}-${slug(s.title)}`}
+                          href={`/services/${cat.slug}/${s.slug}`}
                           onClick={() => setServicesOpen(false)}
                           className="group flex items-center justify-between gap-3 border-b border-[color:var(--line-soft)] py-2 text-sm text-[var(--ink)] transition hover:border-[var(--ink)]"
                         >
-                          <span>{s.title}</span>
+                          <span>{s.name}</span>
                           <ArrowUpRight
                             size={14}
                             className="opacity-0 transition group-hover:opacity-100"
@@ -1504,11 +1513,190 @@ function ServicePreviewBlock({
   );
 }
 
+// ─────────────────────────────────────────────────────────────
+// ServicesPreview (home) — new build, uses servicesTree and deep
+// links to /services/[cat]/[sub]. Auto-rotates the cover image
+// alongside the sub-service list for each category panel.
+// ─────────────────────────────────────────────────────────────
+function HomeServiceCategoryPanel({
+  category,
+  reversed = false,
+}: {
+  category: ServiceCategoryNode;
+  reversed?: boolean;
+}) {
+  const [active, setActive] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: false, margin: "-25%" });
+
+  useEffect(() => {
+    if (!inView) return;
+    const id = setInterval(() => {
+      setActive((i) => (i + 1) % category.subservices.length);
+    }, SLIDESHOW_INTERVAL);
+    return () => clearInterval(id);
+  }, [inView, category.subservices.length]);
+
+  const subs = category.subservices;
+  const activeSub = subs[active];
+
+  const Info = (
+    <div className="flex flex-col p-7 md:p-12">
+      <div className="flex items-center justify-between">
+        <p className="eyebrow">/ {category.name}</p>
+        <span className="font-mono text-[11px] tracking-[0.25em] uppercase text-[var(--ash)]">
+          {String(active + 1).padStart(2, "0")} / {String(subs.length).padStart(2, "0")}
+        </span>
+      </div>
+      <h3 className="mt-5 font-display text-[clamp(1.85rem,3.5vw,3rem)] leading-[1.05] tracking-tight">
+        {category.name}
+      </h3>
+      <p className="mt-4 max-w-md text-base leading-7 text-[var(--ash)]">
+        {category.summary}
+      </p>
+
+      <ul className="mt-8 space-y-1 border-t border-[color:var(--line)] pt-2">
+        {subs.map((s, i) => {
+          const isActive = i === active;
+          return (
+            <li key={s.slug}>
+              <Link
+                href={`/services/${category.slug}/${s.slug}`}
+                onMouseEnter={() => setActive(i)}
+                className="group flex w-full items-center justify-between gap-4 border-b border-[color:var(--line-soft)] py-3 text-left text-base transition hover:bg-[var(--cream)]/40"
+              >
+                <span className="flex flex-1 items-center gap-4">
+                  <span
+                    className={`relative h-px shrink-0 transition-all duration-500 ${
+                      isActive ? "w-10 bg-[var(--gold)]" : "w-4 bg-[var(--ash)]/40"
+                    }`}
+                  />
+                  <span
+                    className={
+                      isActive
+                        ? "font-semibold text-[var(--navy)]"
+                        : "text-[var(--navy)]/70 group-hover:text-[var(--navy)]"
+                    }
+                  >
+                    {s.name}
+                  </span>
+                </span>
+                <ArrowUpRight
+                  size={14}
+                  className={`shrink-0 transition ${
+                    isActive
+                      ? "text-[var(--gold-deep)]"
+                      : "text-[var(--ash)] group-hover:text-[var(--navy)]"
+                  }`}
+                />
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+
+      <div className="mt-8">
+        <Link
+          href={`/services/${category.slug}`}
+          className="group inline-flex items-center gap-2 border-b border-[var(--navy)] pb-1 text-sm font-medium text-[var(--navy)] transition hover:gap-3"
+        >
+          Open {category.name.split(" ")[0]} <ArrowUpRight size={14} />
+        </Link>
+      </div>
+    </div>
+  );
+
+  const Slideshow = (
+    <Link
+      href={`/services/${category.slug}/${activeSub.slug}`}
+      className="relative block min-h-[360px] overflow-hidden bg-[var(--navy)] md:min-h-[520px]"
+      aria-label={`View ${activeSub.name}`}
+    >
+      {subs.map((s, i) => (
+        <motion.div
+          key={s.slug}
+          initial={false}
+          animate={{ opacity: i === active ? 1 : 0, scale: i === active ? 1 : 1.04 }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          className="absolute inset-0"
+        >
+          <img
+            src={s.cover}
+            alt={s.name}
+            width={1536}
+            height={1024}
+            loading={i === 0 ? "eager" : "lazy"}
+            decoding="async"
+            className="block h-full w-full object-cover object-center"
+          />
+        </motion.div>
+      ))}
+
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-black/30" />
+
+      <div className="absolute left-4 top-4 font-mono text-[9px] tracking-[0.25em] uppercase text-white/85 md:left-5 md:top-5 md:text-[10px] md:tracking-[0.3em]">
+        / Now showing
+      </div>
+      <div className="absolute right-4 top-4 hidden font-mono text-[9px] tracking-[0.25em] uppercase text-white/85 sm:block md:right-5 md:top-5 md:text-[10px] md:tracking-[0.3em]">
+        {category.name}
+      </div>
+
+      <motion.div
+        key={activeSub.slug}
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        className="absolute bottom-12 left-4 right-4 text-white md:bottom-5 md:left-5 md:right-5"
+      >
+        <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--gold)]">
+          / {String(active + 1).padStart(2, "0")}
+        </p>
+        <p className="mt-2 font-display text-xl leading-tight md:text-3xl">
+          {activeSub.name}
+        </p>
+        <p className="mt-2 max-w-md text-[13px] leading-5 text-white/80 md:text-sm md:leading-6">
+          {activeSub.tagline}
+        </p>
+      </motion.div>
+
+      <div className="absolute bottom-4 left-4 flex gap-1.5 md:bottom-5 md:left-auto md:right-5">
+        {subs.map((_, i) => (
+          <span
+            key={i}
+            className={`h-1 transition-all duration-500 ${
+              i === active ? "w-6 bg-[var(--gold)]" : "w-2 bg-white/40"
+            }`}
+          />
+        ))}
+      </div>
+    </Link>
+  );
+
+  return (
+    <Reveal>
+      <div
+        ref={ref}
+        className={`grid overflow-hidden rounded-sm border border-[color:var(--line)] bg-[var(--paper)] lg:grid-cols-2 ${
+          reversed ? "lg:[&>*:first-child]:order-2" : ""
+        }`}
+      >
+        {Info}
+        {Slideshow}
+      </div>
+    </Reveal>
+  );
+}
+
 export function ServicesPreview() {
   return (
     <div className="space-y-10">
-      <ServicePreviewBlock categoryKey="commercial" />
-      <ServicePreviewBlock categoryKey="interior" reversed />
+      {servicesTree.map((cat, i) => (
+        <HomeServiceCategoryPanel
+          key={cat.slug}
+          category={cat}
+          reversed={i % 2 === 1}
+        />
+      ))}
     </div>
   );
 }
@@ -1861,10 +2049,12 @@ export function OurWorkShowcase() {
 
 function SubServiceSection({
   sub,
+  categorySlug,
   index,
   onActive,
 }: {
   sub: ServiceCategoryNode["subservices"][number];
+  categorySlug: string;
   index: number;
   onActive: (i: number) => void;
 }) {
@@ -1874,16 +2064,44 @@ function SubServiceSection({
     if (inView) onActive(index);
   }, [inView, index, onActive]);
 
+  const href = `/services/${categorySlug}/${sub.slug}`;
+  const reverse = index % 2 === 1;
+
   return (
     <section
       ref={ref}
       id={`sub-${sub.slug}`}
-      className="relative scroll-mt-[140px] py-12 md:scroll-mt-32 md:py-20 lg:py-24"
+      className="relative scroll-mt-[140px] py-12 md:scroll-mt-32 md:py-20"
     >
-      {/* Sub-service hero block */}
-      <div className="grid items-center gap-8 md:gap-12 lg:grid-cols-[1fr_0.95fr] lg:gap-16">
-        <Reveal>
-          <div>
+      <Link
+        href={href}
+        className="group block overflow-hidden rounded-sm border border-[color:var(--line)] bg-[var(--paper)] transition-colors hover:border-[var(--navy)]"
+      >
+        <div
+          className={`grid gap-0 lg:grid-cols-2 ${
+            reverse ? "lg:[&>*:first-child]:order-2" : ""
+          }`}
+        >
+          <div className="relative aspect-[3/2] overflow-hidden lg:aspect-auto lg:min-h-[440px]">
+            <img
+              src={sub.cover}
+              alt={sub.name}
+              width={1536}
+              height={1024}
+              loading="lazy"
+              decoding="async"
+              className="absolute inset-0 block h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+            />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-black/5 to-transparent" />
+            <span className="absolute left-4 top-4 font-mono text-[10px] tracking-[0.28em] uppercase text-white/85 md:text-[11px]">
+              / {String(index + 1).padStart(2, "0")}
+            </span>
+            <span className="absolute bottom-4 right-4 grid size-12 place-items-center rounded-full border border-white/40 bg-white/10 backdrop-blur transition group-hover:bg-[var(--gold)] group-hover:text-[var(--navy)]">
+              <ArrowUpRight size={18} />
+            </span>
+          </div>
+
+          <div className="flex flex-col gap-6 p-7 md:p-12">
             <div className="flex items-baseline gap-3 md:gap-4">
               <span className="font-mono text-[10px] tracking-[0.26em] uppercase text-[var(--gold-deep)] md:text-[11px] md:tracking-[0.28em]">
                 / Sub-service {String(index + 1).padStart(2, "0")}
@@ -1893,89 +2111,218 @@ function SubServiceSection({
                 {sub.essentials.length} essentials
               </span>
             </div>
-            <h2 className="mt-4 font-display text-[clamp(2rem,5.5vw,4rem)] leading-[1.04] tracking-tight text-[var(--navy)] md:mt-6">
+            <h3 className="font-display text-[clamp(1.85rem,4.5vw,3.25rem)] leading-[1.04] tracking-tight text-[var(--navy)]">
               {sub.name}
-            </h2>
-            <p className="mt-3 font-display-italic text-lg text-[var(--gold-deep)] md:text-xl">
+            </h3>
+            <p className="font-display-italic text-base text-[var(--gold-deep)] md:text-lg">
               {sub.tagline}
             </p>
-            <p className="mt-5 max-w-xl text-base leading-7 text-[var(--ash)] md:text-lg md:leading-8">
+            <p className="text-sm leading-6 text-[var(--ash)] md:text-base md:leading-7">
               {sub.summary}
             </p>
+            <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1.5 border-t border-[color:var(--line)] pt-4 font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--navy)]/75 md:text-[11px]">
+              {sub.essentials.map((e) => (
+                <li key={e.slug}>{e.name}</li>
+              ))}
+            </ul>
+            <span className="mt-3 inline-flex items-center gap-2 self-start border-b border-[var(--navy)] pb-1 text-sm font-medium text-[var(--navy)] transition group-hover:gap-3">
+              View essentials <ArrowUpRight size={14} />
+            </span>
           </div>
-        </Reveal>
-        <Reveal delay={0.1}>
-          <figure className="overflow-hidden rounded-sm border border-[color:var(--line)]">
+        </div>
+      </Link>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// ServicesIndexShowcase — sticky pill nav across ALL sub-services
+// (both categories). Each card is a clickable summary linking to
+// /services/[cat]/[sub] for essentials. Pills jump to in-page
+// anchors of each card. Active pill tracks scroll position.
+// ─────────────────────────────────────────────────────────────
+type FlatSub = {
+  category: ServiceCategoryNode;
+  sub: ServiceCategoryNode["subservices"][number];
+};
+
+function SubServiceCard({
+  entry,
+  index,
+  onActive,
+}: {
+  entry: FlatSub;
+  index: number;
+  onActive: (i: number) => void;
+}) {
+  const ref = useRef<HTMLElement>(null);
+  const inView = useInView(ref, { margin: "-40% 0px -40% 0px" });
+  useEffect(() => {
+    if (inView) onActive(index);
+  }, [inView, index, onActive]);
+
+  const { category: cat, sub } = entry;
+  const href = `/services/${cat.slug}/${sub.slug}`;
+  const reverse = index % 2 === 1;
+
+  return (
+    <section
+      ref={ref}
+      id={`sub-${cat.slug}-${sub.slug}`}
+      className="relative scroll-mt-[140px] py-12 md:scroll-mt-32 md:py-20"
+    >
+      <Link
+        href={href}
+        className="group block overflow-hidden rounded-sm border border-[color:var(--line)] bg-[var(--paper)] transition-colors hover:border-[var(--navy)]"
+      >
+        <div
+          className={`grid gap-0 lg:grid-cols-2 ${
+            reverse ? "lg:[&>*:first-child]:order-2" : ""
+          }`}
+        >
+          {/* Image */}
+          <div className="relative aspect-[3/2] overflow-hidden lg:aspect-auto lg:min-h-[440px]">
             <img
               src={sub.cover}
               alt={sub.name}
-              width={1402}
-              height={1122}
+              width={1536}
+              height={1024}
               loading="lazy"
               decoding="async"
-              className="block h-auto w-full"
+              className="absolute inset-0 block h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
             />
-          </figure>
-        </Reveal>
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-black/5 to-transparent" />
+            <span className="absolute left-4 top-4 font-mono text-[10px] tracking-[0.28em] uppercase text-white/85 md:text-[11px]">
+              / {String(index + 1).padStart(2, "0")} · {cat.name.split(" ")[0]}
+            </span>
+            <span className="absolute bottom-4 right-4 grid size-12 place-items-center rounded-full border border-white/40 bg-white/10 backdrop-blur transition group-hover:bg-[var(--gold)] group-hover:text-[var(--navy)]">
+              <ArrowUpRight size={18} />
+            </span>
+          </div>
+
+          {/* Content */}
+          <div className="flex flex-col gap-6 p-7 md:p-12">
+            <div className="flex items-baseline gap-3 md:gap-4">
+              <span className="font-mono text-[10px] tracking-[0.26em] uppercase text-[var(--gold-deep)] md:text-[11px] md:tracking-[0.28em]">
+                {cat.name}
+              </span>
+              <span className="hidden h-px w-12 bg-[color:var(--line)] sm:block" />
+              <span className="font-mono text-[10px] tracking-[0.26em] uppercase text-[var(--ash)] md:text-[11px] md:tracking-[0.28em]">
+                {sub.essentials.length} essentials
+              </span>
+            </div>
+            <h3 className="font-display text-[clamp(1.85rem,4.5vw,3.25rem)] leading-[1.04] tracking-tight text-[var(--navy)]">
+              {sub.name}
+            </h3>
+            <p className="font-display-italic text-base text-[var(--gold-deep)] md:text-lg">
+              {sub.tagline}
+            </p>
+            <p className="text-sm leading-6 text-[var(--ash)] md:text-base md:leading-7">
+              {sub.summary}
+            </p>
+            <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1.5 border-t border-[color:var(--line)] pt-4 font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--navy)]/75 md:text-[11px]">
+              {sub.essentials.map((e) => (
+                <li key={e.slug}>{e.name}</li>
+              ))}
+            </ul>
+            <span className="mt-3 inline-flex items-center gap-2 self-start border-b border-[var(--navy)] pb-1 text-sm font-medium text-[var(--navy)] transition group-hover:gap-3">
+              View essentials <ArrowUpRight size={14} />
+            </span>
+          </div>
+        </div>
+      </Link>
+    </section>
+  );
+}
+
+const flatSubservices: FlatSub[] = servicesTree.flatMap((c) =>
+  c.subservices.map((s) => ({ category: c, sub: s })),
+);
+
+export function ServicesIndexShowcase() {
+  const flat = flatSubservices;
+
+  const [active, setActive] = useState(0);
+  const pillsRef = useRef<HTMLDivElement>(null);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
+  const progressWidth = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+
+  useEffect(() => {
+    if (!pillsRef.current) return;
+    const el = pillsRef.current.querySelector<HTMLAnchorElement>(
+      `[data-pill="${active}"]`,
+    );
+    el?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+  }, [active]);
+
+  // detect category transitions in pill row
+  return (
+    <div ref={containerRef} className="relative">
+      <div className="sticky top-24 z-30 -mx-5 border-y border-[color:var(--line)] bg-[var(--paper)]/92 backdrop-blur md:-mx-10 md:top-28">
+        <div className="h-[2px] w-full bg-transparent">
+          <motion.div
+            style={{ width: progressWidth }}
+            className="h-full origin-left bg-[var(--gold)]"
+          />
+        </div>
+        <div className="mx-auto flex max-w-[1400px] items-center gap-3 px-5 py-3 md:px-10 md:py-4">
+          <div
+            ref={pillsRef}
+            className="-mx-1 flex flex-1 items-center gap-2 overflow-x-auto scrollbar-none lg:justify-center [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          >
+            {flat.map((entry, i) => {
+              const isActive = i === active;
+              const showDivider =
+                i > 0 && flat[i - 1].category.slug !== entry.category.slug;
+              return (
+                <div key={`${entry.category.slug}-${entry.sub.slug}`} className="flex items-center gap-2">
+                  {showDivider && (
+                    <span
+                      aria-hidden
+                      className="mx-1 h-5 w-px shrink-0 bg-[color:var(--line)]"
+                    />
+                  )}
+                  <a
+                    href={`#sub-${entry.category.slug}-${entry.sub.slug}`}
+                    data-pill={i}
+                    className={`group inline-flex shrink-0 items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors md:px-4 md:py-2 md:text-sm ${
+                      isActive
+                        ? "border-[var(--navy)] bg-[var(--navy)] text-[var(--paper)]"
+                        : "border-[color:var(--line)] bg-[var(--paper)] text-[var(--navy)] hover:border-[var(--navy)]"
+                    }`}
+                  >
+                    <span
+                      className={`font-mono text-[9px] tracking-[0.22em] md:text-[10px] md:tracking-[0.28em] ${
+                        isActive ? "text-[var(--gold)]" : "text-[var(--gold-deep)]"
+                      }`}
+                    >
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="tracking-tight">{entry.sub.name}</span>
+                  </a>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
 
-      {/* Essentials grid */}
-      <div className="mt-10 md:mt-14">
-        <Reveal>
-          <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--gold-deep)]">
-            / Essentials in this scope
-          </p>
-        </Reveal>
-        <motion.ul
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-          variants={{
-            hidden: {},
-            visible: { transition: { staggerChildren: 0.05, delayChildren: 0.1 } },
-          }}
-          className="mt-6 grid gap-px overflow-hidden rounded-sm border border-[color:var(--line)] bg-[color:var(--line)] sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-        >
-          {sub.essentials.map((e) => (
-            <motion.li
-              key={e.slug}
-              variants={{
-                hidden: { opacity: 0, y: 16 },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
-                },
-              }}
-              className="group flex flex-col bg-[var(--paper)]"
-            >
-              <div className="relative aspect-[3/2] overflow-hidden bg-[var(--cream)]">
-                <img
-                  src={e.image}
-                  alt={e.name}
-                  width={1402}
-                  height={1122}
-                  loading="lazy"
-                  decoding="async"
-                  className="block h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
-                />
-              </div>
-              <div className="flex flex-1 flex-col gap-3 p-5 md:p-6">
-                <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--gold-deep)]">
-                  · Essential
-                </p>
-                <h3 className="font-display text-lg leading-tight tracking-tight text-[var(--navy)] md:text-xl">
-                  {e.name}
-                </h3>
-                <p className="text-sm leading-6 text-[var(--ash)] md:text-[15px]">
-                  {e.text}
-                </p>
-              </div>
-            </motion.li>
-          ))}
-        </motion.ul>
+      <div>
+        {flat.map((entry, i) => (
+          <SubServiceCard
+            key={`${entry.category.slug}-${entry.sub.slug}`}
+            entry={entry}
+            index={i}
+            onActive={setActive}
+          />
+        ))}
       </div>
-    </section>
+    </div>
   );
 }
 
@@ -2058,6 +2405,7 @@ export function ServicesCategoryShowcase({
           <SubServiceSection
             key={s.slug}
             sub={s}
+            categorySlug={category.slug}
             index={i}
             onActive={setActive}
           />
@@ -2072,8 +2420,9 @@ export function ServicesCategoryShowcase({
 // ─────────────────────────────────────────────────────────────
 export function WorkGrid() {
   const [active, setActive] = useState(0);
-  const total = workItems.length;
-  const item = workItems[active];
+  const projects = featuredProjects;
+  const total = projects.length;
+  const item = projects[active];
 
   const go = (dir: 1 | -1) => {
     setActive((i) => (i + dir + total) % total);
@@ -2089,32 +2438,60 @@ export function WorkGrid() {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="flex"
           >
-            {workItems.map((w, i) => (
-              <div key={w.title} className="grid w-full shrink-0 grid-cols-1 gap-0 lg:grid-cols-[1.05fr_1fr]">
+            {projects.map((p, i) => (
+              <div
+                key={p.client}
+                className="grid w-full shrink-0 grid-cols-1 gap-0 lg:grid-cols-[1.05fr_1fr]"
+              >
                 {/* Image */}
-                <div className="image-frame relative aspect-[4/3] overflow-hidden lg:aspect-auto lg:min-h-[520px]">
-                  <div className="absolute inset-4 border border-[var(--navy)]/15" />
-                  <div className="absolute left-4 top-4 font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--navy)]/55">
+                <div className="relative aspect-[4/3] overflow-hidden bg-[var(--cream)] lg:aspect-auto lg:min-h-[520px]">
+                  <img
+                    src={p.image}
+                    alt={p.imageAlt}
+                    width={1536}
+                    height={1024}
+                    loading={i === 0 ? "eager" : "lazy"}
+                    decoding="async"
+                    className="absolute inset-0 block h-full w-full object-cover object-center"
+                  />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/15" />
+                  <div className="absolute left-4 top-4 font-mono text-[10px] tracking-[0.3em] uppercase text-white/85">
                     / {String(i + 1).padStart(2, "0")} of {String(total).padStart(2, "0")}
                   </div>
-                  <div className="absolute bottom-4 right-4 font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--navy)]/55">
-                    {w.category}
+                  <div className="absolute bottom-4 right-4 font-mono text-[10px] tracking-[0.3em] uppercase text-white/85">
+                    {p.sector}
                   </div>
                 </div>
                 {/* Info */}
                 <div className="flex flex-col justify-between gap-8 p-8 md:p-12 lg:p-14">
                   <div>
-                    <p className="eyebrow">{w.category}</p>
-                    <h3 className="mt-5 font-display text-3xl leading-tight md:text-5xl">
-                      {w.title}
+                    <p className="eyebrow">/ {p.client} · {p.sector}</p>
+                    <p className="mt-3 font-display-italic text-base text-[var(--gold-deep)] md:text-lg">
+                      {p.tagline}
+                    </p>
+                    <h3 className="mt-3 font-display text-3xl leading-tight md:text-5xl">
+                      {p.title}{" "}
+                      <span className="font-display-italic text-[var(--gold-deep)]">
+                        {p.italic}
+                      </span>
                     </h3>
                     <p className="mt-5 max-w-md text-base leading-7 text-[var(--ash)]">
-                      {w.text}
+                      {p.summary}
                     </p>
+                    <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-[12px] uppercase tracking-[0.2em] text-[var(--ash)]">
+                      <span>
+                        <span className="text-[var(--navy)]/70">Loc · </span>
+                        {p.location}
+                      </span>
+                      <span>
+                        <span className="text-[var(--navy)]/70">Year · </span>
+                        {p.year}
+                      </span>
+                    </div>
                   </div>
                   <div>
                     <Link
-                      href="/our-work"
+                      href={`/our-work#case-${p.client.toLowerCase()}`}
                       className="group inline-flex items-center gap-2 border-b border-[var(--navy)] pb-1 text-sm font-medium text-[var(--navy)] transition hover:gap-3"
                     >
                       View project <ArrowUpRight size={14} />
@@ -2128,7 +2505,6 @@ export function WorkGrid() {
 
         {/* Controls */}
         <div className="flex items-center justify-between gap-6 border-t border-[color:var(--line)] px-6 py-5 md:px-10">
-          {/* Counter + progress */}
           <div className="flex items-center gap-5">
             <p className="font-mono text-sm tracking-widest text-[var(--navy)]">
               <span className="text-[var(--gold-deep)]">
@@ -2145,11 +2521,10 @@ export function WorkGrid() {
               />
             </div>
             <p className="hidden text-xs uppercase tracking-[0.25em] text-[var(--ash)] md:block">
-              {item.category}
+              {item.client} · {item.sector}
             </p>
           </div>
 
-          {/* Arrows */}
           <div className="flex items-center gap-3">
             <button
               type="button"
